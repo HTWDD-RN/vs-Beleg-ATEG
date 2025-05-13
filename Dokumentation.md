@@ -6,6 +6,7 @@
 
 **Verantwortlichkeiten:**
 >Übernimmt Ahmad
+
 * **Koordination der Berechnung:** Der Controller steuert den gesamten Ablauf, teilt Aufgaben zu und sammelt die Ergebnisse.
 * **Aufgabenverteilung:** Unterteilt das Bild in "Tiles" oder Zeilen und teilt diese als Tasks an die Worker zu.
 * **Task-Synchronisation:** Wartet, bis alle Worker ihre Berechnungen abgeschlossen haben, und stellt sicher, dass alle Subtasks korrekt ausgeführt werden.
@@ -26,6 +27,7 @@
 
 #### **Person 2: Mandelbrot-Engine (Berechnungskern)**
 >Übernimmt Tobias
+
 **Verantwortlichkeiten:**
 
 * **Mandelbrot-Berechnung:** Implementiert die eigentliche mathematische Berechnung der Mandelbrot-Menge pro Pixel.
@@ -46,6 +48,7 @@
 
 #### **Person 3: Worker-System & Thread-Pool**
 >Übernimmt Georg
+
 **Verantwortlichkeiten:**
 
 * **Worker-Threads:** Implementiert die Worker, die Aufgaben aus der Queue holen und berechnen.
@@ -67,6 +70,7 @@
 
 #### **Person 4: Renderer & Bildausgabe **
 >Übernimmt Eric 
+
 **Verantwortlichkeiten:**
 
 * **Renderer:** Zeichnet das Bild basierend auf den berechneten Pixelwerten.
