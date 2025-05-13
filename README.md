@@ -2,7 +2,7 @@
 Belegarbeit für Verteilte Systeme von: Ahmad Ali Nabizada, Tobias Kroll, Eric Hübel, Georg Richter
 
 UML-Diagramm:
-
+```
 +---------------------+          +---------------------+
 | <<interface>>       |          |     Controller      |
 |  UserInterface      |<-------->|---------------------|
@@ -56,3 +56,4 @@ UML-Diagramm:
 | +drawPixel(x,y,c)   |                 
 | +saveImage(file)    |                 
 +---------------------+                 
+```
