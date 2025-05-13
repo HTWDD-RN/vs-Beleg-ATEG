@@ -18,7 +18,18 @@ public static int MandelbrotCalculator (double re, doiblee im, int maxIter) {
     double y = 0.0; // Imaginärteil von z
     int iter = 0; //Zählt die Wiederholungen
 
-    
+    while (x*x + y*y <=4 && iter < maxIter){
+      //Abbruchbedingungen:
+      //Folge läuft so lange wie |z| <= 2
+      // && Maxiter nicht erreicht
+
+      double xNew = x*x - y*y + re;
+      double yNew = 2*x*y + im;
+      x = xNew;
+      y = yNew;
+      iter++;
+
+    }
     
 
   }
