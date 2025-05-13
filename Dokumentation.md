@@ -1,38 +1,11 @@
 # Rollenaufteilung(miteels ChatGPT, also diskutierbar):
 
-**Person 1: Controller & Task-Verwaltung**
-- Verantwortlich für die Steuerung des Ablaufs.
-- Teilt das Bild in "Tiles" oder "Zeilenblöcke" auf.
-- Überwacht Fortschritt, synchronisiert Threads.
-- >Übernimmt Ahmad?
-
-**Person 2: Mandelbrot-Engine (Kernberechnung)**
-- Implementiert die Berechnung pro Pixel (z. B. mandelbrot(x, y)).
-- Optimierungen wie Escape-Time oder Smooth Coloring.
-- >Übernimmt Tobias
-
-***Person 3: Worker-System & Parallelisierung**
-- Setzt ein Thread-Pool um (ExecutorService).
-- Optional: Fork/Join Framework oder Work-Stealing.
-- Holt Aufgaben aus Queue und berechnet Subbereiche.
-- >Übernimmt Georg?
-
-**Person 4: GUI / Renderer / Bildausgabe**
-- Darstellung des Endbilds (Swing, JavaFX oder als PNG speichern).
-- Fortschrittsanzeige & Interaktion (Zoom, Repaint, etc.).
-- Paremeter in GUI einstellbar
-- >Übernimmt Eric 
-
-Für das parallele Mandelbrot-Berechnungsprojekt mit 4 Personen im Team würde eine klare **Aufgabenverteilung** den Workflow und die Zusammenarbeit effizient gestalten. Hier ist eine detaillierte Aufteilung der Aufgaben:
-
----
-
 ### 👥 **Teammitglieder und ihre Aufgaben**
 
 #### **Person 1: Controller & Task-Verwaltung**
 
 **Verantwortlichkeiten:**
-
+>Übernimmt Ahmad
 * **Koordination der Berechnung:** Der Controller steuert den gesamten Ablauf, teilt Aufgaben zu und sammelt die Ergebnisse.
 * **Aufgabenverteilung:** Unterteilt das Bild in "Tiles" oder Zeilen und teilt diese als Tasks an die Worker zu.
 * **Task-Synchronisation:** Wartet, bis alle Worker ihre Berechnungen abgeschlossen haben, und stellt sicher, dass alle Subtasks korrekt ausgeführt werden.
@@ -52,7 +25,7 @@ Für das parallele Mandelbrot-Berechnungsprojekt mit 4 Personen im Team würde e
 ---
 
 #### **Person 2: Mandelbrot-Engine (Berechnungskern)**
-
+>Übernimmt Tobias
 **Verantwortlichkeiten:**
 
 * **Mandelbrot-Berechnung:** Implementiert die eigentliche mathematische Berechnung der Mandelbrot-Menge pro Pixel.
@@ -72,7 +45,7 @@ Für das parallele Mandelbrot-Berechnungsprojekt mit 4 Personen im Team würde e
 ---
 
 #### **Person 3: Worker-System & Thread-Pool**
-
+>Übernimmt Georg
 **Verantwortlichkeiten:**
 
 * **Worker-Threads:** Implementiert die Worker, die Aufgaben aus der Queue holen und berechnen.
@@ -92,8 +65,8 @@ Für das parallele Mandelbrot-Berechnungsprojekt mit 4 Personen im Team würde e
 
 ---
 
-#### **Person 4: Renderer & Bildausgabe**
-
+#### **Person 4: Renderer & Bildausgabe **
+>Übernimmt Eric 
 **Verantwortlichkeiten:**
 
 * **Renderer:** Zeichnet das Bild basierend auf den berechneten Pixelwerten.
