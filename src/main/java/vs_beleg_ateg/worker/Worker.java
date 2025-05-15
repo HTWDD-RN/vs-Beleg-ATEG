@@ -1,21 +1,24 @@
-//package h;
+package vs_beleg_ateg.worker;
 
-import MandelbrotEngine.MandelbrotCalculator;
+import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
+import vs_beleg_ateg.worker.Task;
+
 public class Worker extends Thread {
-    private final TaskQueue taskQueue;  // Eine Warteschlange von Tasks
-    public Worker(TaskQueue taskQueue) {
+    private final ThreadPool taskQueue;  // Eine Warteschlange von Tasks
+    public Worker(ThreadPool taskQueue) {
         this.taskQueue = taskQueue;
     }
 
     @Override
-    public void run() {T
+    public void run() {
         Task task = getTask();  // Holt den nächsten Task
         int i,j = 0;
         if (task != null) {
+            int iteration = task.getIteration();
             //Verarbeite den Task (Berechnung)
-            for(i= task.getStartX ;i< task.width;i++)
-                for(j = task.getStartY; i< task.height;i++)
-                    computeMandelbrot(double x, double y, int Iteration);
+            for(i= task.getStartX() ;i< task.getWidth();i++)
+                for(j = task.getStartY(); i< task.getHeight();i++)
+                    computeMandelbrot(i, j,iteration);
         }
     }
  
@@ -25,12 +28,13 @@ public class Worker extends Thread {
 
     public void computeMandelbrot(double x, double y, int Iteration) {
         
-        MandelbrotCalculator MbEngine = new MandelbrotCalculator(x,y,Iteration);
+        MandelbrotCalculator MbEngine = new MandelbrotCalculator();
+        int pix = MbEngine.MandelbrotCalculator(x, y, Iteration);
     }
 }
 
 
-
+/* 
 public class MyThread extends Thread{
 
     private String myName;
@@ -93,4 +97,4 @@ public class MyThread extends Thread{
 
 
     }
-
+*/

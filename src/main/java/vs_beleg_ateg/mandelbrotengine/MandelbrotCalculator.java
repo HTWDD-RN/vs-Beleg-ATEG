@@ -1,4 +1,4 @@
-package mandelbrotengine;
+package vs_beleg_ateg.mandelbrotengine;
 
 /* Klasse für die mathematische Logik
  * - Berechnung pro Punkt
@@ -7,7 +7,7 @@ package mandelbrotengine;
 
 public class MandelbrotCalculator {
 
-public static int MandelbrotCalculator (double re, doiblee im, int maxIter) {
+  public static int MandelbrotCalculator (double re, double im, int maxIter) {
 
     //Parameter:
     // re : Realteil der komplexen Zahl c = re + i*im
@@ -29,8 +29,9 @@ public static int MandelbrotCalculator (double re, doiblee im, int maxIter) {
       y = yNew;
       iter++;
 
+      
     }
-    
+    return 0;
 
   }
 }

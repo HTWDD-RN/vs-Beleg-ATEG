@@ -1,8 +1,11 @@
+package vs_beleg_ateg.worker;
+
 public class Task {
     private int startX;
     private int startY;
     private int width;
     private int height;
+    private int iteration;
 
     public Task(int startX, int startY, int width, int height) {
         this.startX = startX;
@@ -16,4 +19,5 @@ public class Task {
     public int getStartY() { return startY; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
+     public int getIteration() { return iteration; }
 }

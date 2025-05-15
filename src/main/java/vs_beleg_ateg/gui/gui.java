@@ -12,6 +12,7 @@
 // StartButton
 // Fortschrittsleiste (1/4 Workern fertig)
 // -> GUI gibt an Controller weiter
+package vs_beleg_ateg.gui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 
 class gui extends JPanel{
     static JFrame frame;
