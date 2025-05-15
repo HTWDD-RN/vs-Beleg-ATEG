@@ -53,6 +53,7 @@
 
 * **Worker-Threads:** Implementiert die Worker, die Aufgaben aus der Queue holen und berechnen.
 * **Thread-Pool:** Verwendet ein Thread-Pool-System (z. B. `ExecutorService` oder `ForkJoinPool`), um die parallele Verarbeitung zu ermöglichen.
+* **TaskQueue:** (_selbst hinzugefügt_ ) Folge an Tasks, die von Controller erstellt werden
 * **Task-Management:** Arbeitet mit dem Controller zusammen, um sicherzustellen, dass die Tasks effizient verteilt und abgearbeitet werden.
 
 **Methoden:**
