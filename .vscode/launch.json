@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "GUI",
+            "request": "launch",
+            "mainClass": "vs_beleg_ateg.gui.GUI",
+            "projectName": "vs_beleg_ateg"
+        },
+        {
+            "type": "java",
+            "name": "gui",
+            "request": "launch",
+            "mainClass": "vs_beleg_ateg.gui.gui",
+            "projectName": "vs_beleg_ateg"
+        },
+        {
             "type": "jdk",
             "request": "launch",
             "name": "Launch Java App"

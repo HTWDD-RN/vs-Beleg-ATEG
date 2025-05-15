@@ -21,8 +21,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-
-class gui extends JPanel{
+class GUI extends JPanel{
     static JFrame frame;
     static int frame_width = 600;
     static int frame_height = 700;
@@ -34,10 +33,11 @@ class gui extends JPanel{
     static int bufimg_height = 300;
 
     // Konstruktor
-    public gui() throws IOException {
+    public GUI() throws IOException {
         // Bild erstellen
         img = new BufferedImage(bufimg_width, bufimg_height, BufferedImage.TYPE_INT_ARGB);
-        File file = new File("mandel.jpg");
+        System.out.println("Working Directory: " + System.getProperty("user.dir"));
+        File file = new File("src/main/java/vs_beleg_ateg/gui/mandel.jpg");
         BufferedImage mandelimage = ImageIO.read(file);
 
         Graphics2D g2d = img.createGraphics();
@@ -54,15 +54,17 @@ class gui extends JPanel{
     public static void main(String[] args) throws IOException{
         frame = new JFrame("GUI für Mandelbrot");
         frame.setSize(frame_width, frame_height);
+        frame.setMinimumSize(new Dimension(frame_width, frame_height));
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         // JPanel erstellen, zum frame hinzufügen
-        gui panel = new gui();
+        GUI panel = new GUI();
         frame.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(5, 5, 5, 5); // Abstand zwischen Komponenten
 
         gbc.gridx = 0; gbc.gridy = 0;
@@ -144,7 +146,11 @@ class gui extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(img, 0, 0, this);          // uses buffered image
+        if (img != null) { // zentriert zeichnen
+            int x = (getWidth() - img.getWidth()) / 2;
+            int y = (getHeight() - img.getHeight()) / 2;
+            g.drawImage(img, x, y, this);
+        }
     }
 
 }
