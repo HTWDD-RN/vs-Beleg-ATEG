@@ -28,8 +28,8 @@ public class Worker extends Thread {
 
     public void computeMandelbrot(double x, double y, int Iteration) {
         
-        MandelbrotCalculator MbEngine = new MandelbrotCalculator();
-        int pix = MbEngine.MandelbrotCalculator(x, y, Iteration);
+        //MandelbrotCalculator MbEngine = new MandelbrotCalculator();
+        int pix = MandelbrotCalculator.MandelbrotCalculator(x, y, Iteration);
     }
 }
 
