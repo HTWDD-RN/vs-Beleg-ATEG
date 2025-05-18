@@ -3,7 +3,7 @@ package vs_beleg_ateg.worker;
 import java.util.*;
 import vs_beleg_ateg.worker.Task;
 
-public class ThreadPool {
+public class ThreadPool {   //Pool von 4 Tasks für die 4 Worker(Threads), die sie ausführen.
     List<Task> TaskQueue;
     List<int[][]> ComputedPixels;
 
@@ -20,5 +20,5 @@ public class ThreadPool {
         return TaskQueue.getFirst();
     }
     
-    
+
 }

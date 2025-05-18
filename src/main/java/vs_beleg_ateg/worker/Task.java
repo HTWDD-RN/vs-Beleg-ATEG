@@ -6,7 +6,9 @@ public class Task {
     private int width;
     private int height;
     private int iteration;
+    private int[][] pixelData;
 
+    
     public Task(int startX, int startY, int width, int height) {
         this.startX = startX;
         this.startY = startY;
@@ -19,5 +21,9 @@ public class Task {
     public int getStartY() { return startY; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
-     public int getIteration() { return iteration; }
+    public int getIteration() { return iteration; }
+    
+    public int[][] getPixelData() {
+        return pixelData;
+    }
 }
