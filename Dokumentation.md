@@ -51,16 +51,17 @@
 
 **Verantwortlichkeiten:**
 
-* **Worker-Threads:** Implementiert die Worker, die Aufgaben aus der Queue holen und berechnen.
-* **Thread-Pool:** Verwendet ein Thread-Pool-System (z. B. `ExecutorService` oder `ForkJoinPool`), um die parallele Verarbeitung zu ermöglichen.
-* **TaskQueue:** (_selbst hinzugefügt_ ) Folge an Tasks, die von Controller erstellt werden
-* **Task-Management:** Arbeitet mit dem Controller zusammen, um sicherzustellen, dass die Tasks effizient verteilt und abgearbeitet werden.
+* **Worker-Interface:** Definiert die Remote-Methoden, die vom Master aufgerufen werden können, um dem Worker Aufgaben zu übergeben. (-> WorkerInterface), gibt Result über Schnittstelle zurück
+* **WorkerImpl:** Erstellt Thread zur Berechnung eines Tiles(evtl nicht nötig).
+* **Worker-Thread:** Thread, der Task unterteilt und an MandelbrotEngine weitergibt
+* **Daten-Klasse Task:** Enhält Daten zum zu berechnenden Tile des Fensters;
+* **Daten-Klasse TaskResult:** Enhält Ergebnis-Daten zum zu berechnenden Tile des Fensters als 2-dimensionales Array;
 
 **Methoden:**
 
 * `run()`: Führt die Berechnungen für die zugewiesene Aufgabe aus.
-* `getTask()`: Holt sich eine Task aus der Queue oder vom Controller zur Berechnung.
-* `shutdown()`: Beendet den Thread-Pool, wenn alle Berechnungen abgeschlossen sind.
+* `computeTask()`: Führt vom Controller gegebene Task zur Berechnung aus, returnt TaskResult. Ist RMI-Schnittstelle zu WorkerInterface
+
 
 **Zusammenarbeit mit anderen Teammitgliedern:**
 
