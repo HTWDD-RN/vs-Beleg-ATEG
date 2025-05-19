@@ -5,8 +5,10 @@ import vs_beleg_ateg.worker.Task;
 
 public class WorkerThread extends Thread {
     Task task;
+    TaskResult result;
     public WorkerThread(Task ToDo){
         this.task = ToDo;
+        this.result = new TaskResult(ToDo.getWidth(),ToDo.getHeight());
     }
 
     @Override
@@ -18,7 +20,7 @@ public class WorkerThread extends Thread {
             for(i= task.getStartX() ;i< task.getWidth();i++)
                 for(j = task.getStartY(); i< task.getHeight();i++){
                      int pixel = computeMandelbrot(i, j,iteration);
-                     task.setPixel(pixel, i, j);
+                     result.setPixel(pixel, i, j);
                 }
         }
     }
@@ -29,4 +31,10 @@ public class WorkerThread extends Thread {
         int pix = MandelbrotCalculator.MandelbrotCalculator(x, y, Iteration);
         return pix;
     }
+
+    public TaskResult getResult() {
+        return result;
+    }
+
+    
 }

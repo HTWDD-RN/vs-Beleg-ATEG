@@ -6,7 +6,6 @@ public class Task {
     private int width;
     private int height;
     private int iteration;
-    private int[][] pixelData;
 
     
     public Task(int startX, int startY, int width, int height) {
@@ -14,7 +13,6 @@ public class Task {
         this.startY = startY;
         this.width = width;
         this.height = height;
-        this.pixelData = new int[width][height];
     }
 
     // Getter-Methoden für die Task-Parameter
@@ -24,11 +22,4 @@ public class Task {
     public int getHeight() { return height; }
     public int getIteration() { return iteration; }
     
-    public int[][] getPixelData() {
-        return pixelData;
-    }
-
-    public void setPixel(int pixelData, int xPos, int yPos) {
-        this.pixelData[xPos][yPos] = pixelData;
-    }
 }

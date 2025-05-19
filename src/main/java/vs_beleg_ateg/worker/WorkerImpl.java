@@ -13,7 +13,7 @@ public class WorkerImpl extends UnicastRemoteObject
         this.task = newTask;
     }
     
-    public Task computeTask(Task task) throws RemoteException{
+    public TaskResult computeTask(Task task) throws RemoteException{
         WorkerThread worker = new WorkerThread(task);
         worker.start();
 
@@ -24,7 +24,7 @@ public class WorkerImpl extends UnicastRemoteObject
             throw new RemoteException("Thread interrupted", e);
         }
 
-        return task;
+        return worker.getResult();
     }
 
     public void setTask(Task task) {

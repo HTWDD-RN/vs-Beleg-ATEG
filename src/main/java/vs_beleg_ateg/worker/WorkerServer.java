@@ -9,8 +9,8 @@ public class WorkerServer {
         try {
             //WorkerImpl worker = new WorkerImpl(4); // 4 Threads im Pool
             Registry registry = LocateRegistry.getRegistry("mandelbrot-master", 1199);
-            WorkerInterface stub = (WorkerInterface) registry.lookup("Worker1")
-            registry.rebind("Worker_" + System.currentTimeMillis(), worker);
+            WorkerInterface stub = (WorkerInterface) registry.lookup("Worker1");
+            //registry.rebind("Worker_" + System.currentTimeMillis(), worker);
             System.out.println("Worker ready.");
         } catch (Exception e) {
             e.printStackTrace();
