@@ -1,35 +1,34 @@
 package vs_beleg_ateg.worker;
 
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.RemoteException;
+
 import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 import vs_beleg_ateg.worker.Task;
 
-public class Worker extends Thread {
-    private final ThreadPool taskQueue;  // Eine Warteschlange von Tasks
-    public Worker(ThreadPool taskQueue) {
-        this.taskQueue = taskQueue;
+public class WorkerImpl extends UnicastRemoteObject
+    implements WorkerInterface {
+    Task task;
+    public WorkerImpl(Task newTask) throws RemoteException{
+        this.task = newTask;
     }
+    
+    public Task computeTask(Task task) throws RemoteException{
+        WorkerThread worker = new WorkerThread(task);
+        worker.start();
 
-    @Override
-    public void run() {
-        Task task = getTask();  // Holt den nächsten Task
-        int i,j = 0;
-        if (task != null) {
-            int iteration = task.getIteration();
-            //Verarbeite den Task (Berechnung)
-            for(i= task.getStartX() ;i< task.getWidth();i++)
-                for(j = task.getStartY(); i< task.getHeight();i++)
-                    computeMandelbrot(i, j,iteration);
+        try {
+            worker.join(); // Warten bis Thread fertig ist
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RemoteException("Thread interrupted", e);
         }
-    }
- 
-    public synchronized Task getTask() {
-        return taskQueue.pull();  // Holt den nächsten Task aus der Warteschlange
+
+        return task;
     }
 
-    public void computeMandelbrot(double x, double y, int Iteration) {
-        
-        //MandelbrotCalculator MbEngine = new MandelbrotCalculator();
-        int pix = MandelbrotCalculator.MandelbrotCalculator(x, y, Iteration);
+    public void setTask(Task task) {
+        this.task = task;
     }
 }
 
