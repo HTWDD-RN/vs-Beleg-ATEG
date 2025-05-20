@@ -1,9 +1,8 @@
 package vs_beleg_ateg.controller;
 
 import vs_beleg_ateg.worker.*;
-import vs_beleg_ateg.gui.GUI;
-
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class Controller {
 
     private void connectToWorkers(int count) {
         try {
-            Registry registry = LocateRegistry.getRegistry("localhost", 1199); // oder IP der Master-Maschine
+            Registry registry = LocateRegistry.getRegistry("localhost", 1199);
             for (int i = 1; i <= count; i++) {
                 WorkerInterface stub = (WorkerInterface) registry.lookup("Worker" + i);
                 workerList.add(stub);
@@ -53,34 +52,59 @@ public class Controller {
     }
 
     public BufferedImage startCalculation() {
+        return startComputation();
+    }
+
+    private BufferedImage startComputation() {
         BufferedImage resultImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        List<Task> tasks = divideTasks();
+        List<TaskResult> results = collectResults(tasks);
 
-        int blockHeight = imageHeight / workerList.size(); // einfach in horizontale Streifen teilen
+        // Setze die berechneten Pixel ins Bild ein
+        for (int i = 0; i < results.size(); i++) {
+            Task task = tasks.get(i);
+            TaskResult result = results.get(i);
+            for (int x = 0; x < result.getWidth(); x++) {
+                for (int y = 0; y < result.getHeight(); y++) {
+                    int iter = result.getPixelData()[x][y];
+                    int color = iterToColor(iter, maxIterations);
+                    resultImage.setRGB(x, task.getY() + y, color);
+                }
+            }
+        }
 
-        List<Thread> threads = new ArrayList<>();
+        return resultImage;
+    }
+
+    private List<Task> divideTasks() {
+        List<Task> taskList = new ArrayList<>();
+        int blockHeight = imageHeight / workerList.size();
 
         for (int i = 0; i < workerList.size(); i++) {
             int yStart = i * blockHeight;
             int yEnd = (i == workerList.size() - 1) ? imageHeight : yStart + blockHeight;
             int blockH = yEnd - yStart;
 
-            final int workerIndex = i;
+            Task task = new Task(0, yStart, imageWidth, blockH);
+            task.setIteration(maxIterations);
+            taskList.add(task);
+        }
+
+        return taskList;
+    }
+
+    private List<TaskResult> collectResults(List<Task> taskList) {
+        List<TaskResult> results = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        List<TaskResult> resultBuffer = new ArrayList<>();
+        for (int i = 0; i < taskList.size(); i++) resultBuffer.add(null); // Platzhalter
+
+        for (int i = 0; i < taskList.size(); i++) {
+            final int index = i;
             Thread t = new Thread(() -> {
                 try {
-                    Task task = new Task(0, yStart, imageWidth, blockH);
-                    task.setIteration(maxIterations);
-
-                    TaskResult result = workerList.get(workerIndex).computeTask(task);
-
-                    // Ergebnis ins finale Bild schreiben
-                    for (int x = 0; x < result.getWidth(); x++) {
-                        for (int y = 0; y < result.getHeight(); y++) {
-                            int iter = result.getPixelData()[x][y];
-                            int color = iterToColor(iter, maxIterations);
-                            resultImage.setRGB(x, yStart + y, color);
-                        }
-                    }
-
+                    TaskResult result = workerList.get(index).computeTask(taskList.get(index));
+                    resultBuffer.set(index, result);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -89,7 +113,6 @@ public class Controller {
             t.start();
         }
 
-        // Warten, bis alle fertig sind
         for (Thread t : threads) {
             try {
                 t.join();
@@ -98,11 +121,11 @@ public class Controller {
             }
         }
 
-        return resultImage;
+        return resultBuffer;
     }
 
     private int iterToColor(int iter, int max) {
-        if (iter == max) return 0x000000; // Schwarz (nicht entkommen)
+        if (iter == max) return 0x000000;
         float hue = iter / (float) max;
         return Color.HSBtoRGB(hue, 1f, 1f);
     }
