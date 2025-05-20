@@ -112,7 +112,7 @@ public class Controller {
             threads.add(t);
             t.start();
         }
-
+        // Warten, bis alle fertig sind
         for (Thread t : threads) {
             try {
                 t.join();
@@ -125,7 +125,7 @@ public class Controller {
     }
 
     private int iterToColor(int iter, int max) {
-        if (iter == max) return 0x000000;
+        if (iter == max) return 0x000000; // Schwarz (nicht entkommen)
         float hue = iter / (float) max;
         return Color.HSBtoRGB(hue, 1f, 1f);
     }
