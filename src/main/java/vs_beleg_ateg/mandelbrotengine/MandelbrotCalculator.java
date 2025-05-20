@@ -32,7 +32,8 @@ public class MandelbrotCalculator {
       
     }
     return 0;
-
+      // Farbe zurück geben 
+      // über Taskresult 
   }
 }
 
