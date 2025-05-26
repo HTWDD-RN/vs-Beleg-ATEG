@@ -31,11 +31,15 @@ public class MandelbrotCalculator {
 
       
     }
-    return 0;
-      // Farbe zurück geben 
-      // über Taskresult 
+    if (iter == maxIter) {
+    return 0x000000; // Schwarz = Punkt gehört zur Mandelbrot-Menge
+    } 
+    else {
+    return java.awt.Color.HSBtoRGB(iter / 256f, 1f, 1f); // Farbe nach Iteration
+    }
   }
-}
+}  
+
 
 
 
