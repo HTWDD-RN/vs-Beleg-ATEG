@@ -197,6 +197,7 @@ class GUI extends JPanel implements guiInterface{
     }
 
     public void givePixelData(BufferedImage newImage) {
+        System.out.printf("Got stuff!");
         img = newImage;
         repaint(); // forciert Neuzeichnung
     }
