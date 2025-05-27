@@ -7,8 +7,7 @@ import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import vs_beleg_ateg.gui.GUI;
-import vs_beleg_ateg.gui.guiInterface;
+import vs_beleg_ateg.gui.*;
 import vs_beleg_ateg.worker.Task;
 import vs_beleg_ateg.worker.TaskResult;
 import vs_beleg_ateg.worker.WorkerInterface;
@@ -21,6 +20,7 @@ public class Controller {
     private double zoomFactor;
     private int stepCount;
     private int maxIterations;
+    private guiInterface gui;
 
     public Controller(
             int imageWidth,
@@ -30,7 +30,8 @@ public class Controller {
             double zoomFactor,
             int stepCount,
             int maxIterations,
-            int workerCount
+            int workerCount,
+            guiInterface gui
     ) {
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
@@ -39,6 +40,7 @@ public class Controller {
         this.zoomFactor = zoomFactor;
         this.stepCount = stepCount;
         this.maxIterations = maxIterations;
+        this.gui = gui;
 
         connectToWorkers(workerCount);
     }
@@ -56,11 +58,7 @@ public class Controller {
         }
     }
 
-    public BufferedImage startCalculation() {
-        return startComputation();
-    }
-
-    private BufferedImage startComputation() {
+    private boolean startComputation() {
         BufferedImage resultImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
         List<Task> tasks = divideTasks();
         List<TaskResult> results = collectResults(tasks);
@@ -77,8 +75,8 @@ public class Controller {
             }
         }
 
-        gu ControllerGui = new GUI();
-        ControllerGui.givePixelData(resultImage);
+        gui.givePixelData(resultImage);
+        return true;
     }
 
     private List<Task> divideTasks() {
