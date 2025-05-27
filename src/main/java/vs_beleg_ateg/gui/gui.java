@@ -26,8 +26,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-class GUI extends JPanel{
-    Controller controller;
+class GUI extends JPanel implements guiInterface{
+    static Controller controller;
 
     static JFrame frame;
     static int frame_width = 600;
@@ -93,7 +93,7 @@ class GUI extends JPanel{
             int WorkerNumber = (Integer) WorkerNumber_Spinner.getValue();  
             int MaxIterations = (Integer)MaxIterations_Spinner.getValue();
             // an Controller übergeben
-            Controller controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber);
+            controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber);
         }
     }
     
@@ -203,5 +203,7 @@ class GUI extends JPanel{
             g.drawImage(img, x, y, this);
         }
     }
+
+
 
 }
