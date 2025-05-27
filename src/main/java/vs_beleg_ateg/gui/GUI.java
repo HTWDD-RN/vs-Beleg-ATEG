@@ -26,7 +26,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-class GUI extends JPanel implements guiInterface{
+public class GUI extends JPanel implements guiInterface{
     static Controller controller;
 
     static GUI panel;
@@ -197,6 +197,7 @@ class GUI extends JPanel implements guiInterface{
     }
 
     public void givePixelData(BufferedImage newImage) {
+        System.out.printf("Got stuff!");
         img = newImage;
         repaint(); // forciert Neuzeichnung
     }
@@ -210,7 +211,4 @@ class GUI extends JPanel implements guiInterface{
             g.drawImage(img, x, y, this);
         }
     }
-
-
-
 }
