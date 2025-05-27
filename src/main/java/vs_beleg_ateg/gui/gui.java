@@ -27,6 +27,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 class GUI extends JPanel{
+    Controller controller;
+
     static JFrame frame;
     static int frame_width = 600;
     static int frame_height = 700;
@@ -79,15 +81,21 @@ class GUI extends JPanel{
     }
 
     static void ButtonHandler(ActionEvent e){
-            if (e.getActionCommand().equals("Start!")){
-                System.out.println("Start Button pressed!");
-
-
-                // Werte bekommen
-                //Res_Label.getValue() + "";
-                //Controller.setVars();
-            }
+        if (e.getActionCommand().equals("Start!")){
+            System.out.println("Start Button pressed!");
+            // Werte bekommen
+            int ResWidth = (Integer)ResWidth_Spinner.getValue();
+            int ResHeight = (Integer)ResHeight_Spinner.getValue();
+            double ZoompointX = (Double)ZoompointX_Spinner.getValue();
+            double ZoompointY =  (Double)ZoompointY_Spinner.getValue();
+            double Zoomfactor = (Double)Zoomfactor_Spinner.getValue();
+            int StepNumber = (Integer)StepNumber_Spinner.getValue(); 
+            int WorkerNumber = (Integer) WorkerNumber_Spinner.getValue();  
+            int MaxIterations = (Integer)MaxIterations_Spinner.getValue();
+            // an Controller übergeben
+            Controller controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber);
         }
+    }
     
         public static void main(String[] args) throws IOException{
             frame = new JFrame("GUI für Mandelbrot");
