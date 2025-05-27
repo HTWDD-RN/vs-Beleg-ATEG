@@ -38,7 +38,8 @@ public class MandelbrotCalculator {
     return java.awt.Color.HSBtoRGB(iter / 256f, 1f, 1f); // Farbe nach Iteration
     }
   }
-}  
+}  // img.setRGB(x, y, color);  // color ist int → funktioniert direkt!
+
 
 
 
