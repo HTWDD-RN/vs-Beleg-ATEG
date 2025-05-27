@@ -29,7 +29,7 @@ public class Controller {
             int stepCount,
             int maxIterations,
             int workerCount,
-            guiInterface gui
+            GUI gui
     ) {
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
