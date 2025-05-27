@@ -7,6 +7,8 @@ import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
+import vs_beleg_ateg.gui.GUI;
+import vs_beleg_ateg.gui.guiInterface;
 import vs_beleg_ateg.worker.Task;
 import vs_beleg_ateg.worker.TaskResult;
 import vs_beleg_ateg.worker.WorkerInterface;
@@ -69,14 +71,14 @@ public class Controller {
             TaskResult result = results.get(i);
             for (int x = 0; x < result.getWidth(); x++) {
                 for (int y = 0; y < result.getHeight(); y++) {
-                    int iter = result.getPixelData()[x][y];
-                    int color = iterToColor(iter, maxIterations);
+                    int color = result.getPixelData()[x][y];
                     resultImage.setRGB(x, task.getStartY() + y, color);
                 }
             }
         }
 
-        return resultImage;
+        gu ControllerGui = new GUI();
+        ControllerGui.givePixelData(resultImage);
     }
 
     private List<Task> divideTasks() {
