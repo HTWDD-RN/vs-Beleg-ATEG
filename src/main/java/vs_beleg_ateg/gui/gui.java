@@ -26,9 +26,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-class GUI extends JPanel{
-    Controller controller;
+class GUI extends JPanel implements guiInterface{
+    static Controller controller;
 
+    static GUI panel;
     static JFrame frame;
     static int frame_width = 600;
     static int frame_height = 700;
@@ -65,7 +66,7 @@ class GUI extends JPanel{
     public GUI() throws IOException {
         // Bild erstellen
         img = new BufferedImage(bufimg_width, bufimg_height, BufferedImage.TYPE_INT_ARGB);
-        System.out.println("Working Directory: " + System.getProperty("user.dir"));
+        /*System.out.println("Working Directory: " + System.getProperty("user.dir"));
         File file = new File("src/main/java/vs_beleg_ateg/gui/mandel.jpg");
         BufferedImage mandelimage = ImageIO.read(file);
 
@@ -78,6 +79,7 @@ class GUI extends JPanel{
         g2d.setFont(font);
         g2d.drawString("Hello World GUI :)", 20, 70);
         g2d.dispose();  // Grafikobjekt freigeben
+        */
     }
 
     static void ButtonHandler(ActionEvent e){
@@ -93,7 +95,7 @@ class GUI extends JPanel{
             int WorkerNumber = (Integer) WorkerNumber_Spinner.getValue();  
             int MaxIterations = (Integer)MaxIterations_Spinner.getValue();
             // an Controller übergeben
-            Controller controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber);
+            controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber);
         }
     }
     
@@ -105,7 +107,7 @@ class GUI extends JPanel{
             frame.setLocationRelativeTo(null);
     
             // JPanel erstellen, zum frame hinzufügen
-            GUI panel = new GUI();
+            panel = new GUI();
             frame.setLayout(new GridBagLayout());
     
             GridBagConstraints gbc = new GridBagConstraints();
@@ -194,6 +196,11 @@ class GUI extends JPanel{
         panel.repaint();
     }
 
+    public void givePixelData(BufferedImage newImage) {
+        img = newImage;
+        repaint(); // forciert Neuzeichnung
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -203,5 +210,7 @@ class GUI extends JPanel{
             g.drawImage(img, x, y, this);
         }
     }
+
+
 
 }
