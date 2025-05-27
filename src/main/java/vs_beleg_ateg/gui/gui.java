@@ -38,13 +38,26 @@ class GUI extends JPanel{
     static int bufimg_height = 300;
 
     static JLabel Res_Label;
-    JSpinner ResWidth_Spinner;
-    JSpinner ResHeight_Spinner;
-    JLabel Zoompoint_Label;
-    JSpinner ZoompointX_Spinner
-    JSpinner ZoompointY_Spinner
+    static JSpinner ResWidth_Spinner;
+    static JSpinner ResHeight_Spinner;
+ 
+    static JLabel Zoompoint_Label;
+    static JSpinner ZoompointX_Spinner;
+    static JSpinner ZoompointY_Spinner;
 
+    static JSpinner Zoomfactor_Spinner;
+    static JLabel Zoomfactor_Label;
 
+    static JLabel StepNumber_Label;
+    static JSpinner StepNumber_Spinner;
+
+    static JLabel WorkerNumber_Label;
+    static JSpinner WorkerNumber_Spinner; 
+
+    static JLabel MaxIterations_Label;
+    static JSpinner MaxIterations_Spinner;
+
+    static JButton Start_Button;
 
     // Konstruktor
     public GUI() throws IOException {
@@ -71,7 +84,7 @@ class GUI extends JPanel{
 
 
                 // Werte bekommen
-                Res_Label.getValue() + "";
+                //Res_Label.getValue() + "";
                 //Controller.setVars();
             }
         }
@@ -113,45 +126,45 @@ class GUI extends JPanel{
             frame.add(ResHeight_Spinner, gbc);
     
             gbc.gridx = 0; gbc.gridy = 2;
-            JLabel Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
+            Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
             frame.add(Zoompoint_Label, gbc);
             gbc.gridx = 1; gbc.gridy = 2;
-            JSpinner ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -2.5, 1, 0.001));
+            ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -2.5, 1, 0.001));
             frame.add(ZoompointX_Spinner, gbc);
             gbc.gridx = 2; gbc.gridy = 2;
-            JSpinner ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -1.5, 1.5, 0.001));
+            ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -1.5, 1.5, 0.001));
             frame.add(ZoompointY_Spinner, gbc);
     
             gbc.gridx = 0; gbc.gridy = 3;
-            JLabel Zoomfactor_Label = new JLabel("Zoomfaktor: ");
+            Zoomfactor_Label = new JLabel("Zoomfaktor: ");
             frame.add(Zoomfactor_Label, gbc);
             gbc.gridx = 1; gbc.gridy = 3;
-            JSpinner Zoomfactor_Spinner = new JSpinner(new SpinnerNumberModel(0.8, 0.1, 2, 0.001));
+            Zoomfactor_Spinner = new JSpinner(new SpinnerNumberModel(0.8, 0.1, 2, 0.001));
             frame.add(Zoomfactor_Spinner, gbc);
     
             gbc.gridx = 0; gbc.gridy = 4;
-            JLabel StepNumber_Label = new JLabel("Stufenanzahl: ");
+            StepNumber_Label = new JLabel("Stufenanzahl: ");
             frame.add(StepNumber_Label, gbc);
             gbc.gridx = 1; gbc.gridy = 4;
-            JSpinner StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
+            StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
             frame.add(StepNumber_Spinner, gbc);
     
             gbc.gridx = 0; gbc.gridy = 5;
-            JLabel WorkerNumber_Label = new JLabel("Anzahl Worker: ");
+            WorkerNumber_Label = new JLabel("Anzahl Worker: ");
             frame.add(WorkerNumber_Label, gbc);
             gbc.gridx = 1; gbc.gridy = 5;
-            JSpinner WorkerNumber_Spinner = new JSpinner(new SpinnerNumberModel(4, 1, 64, 1));
+            WorkerNumber_Spinner = new JSpinner(new SpinnerNumberModel(4, 1, 64, 1));
             frame.add(WorkerNumber_Spinner, gbc);
     
             gbc.gridx = 0; gbc.gridy = 6;
-            JLabel MaxIterations_Label = new JLabel("Max. Iterationsanzahl: ");
+            MaxIterations_Label = new JLabel("Max. Iterationsanzahl: ");
             frame.add(MaxIterations_Label, gbc);
             gbc.gridx = 1; gbc.gridy = 6;
-            JSpinner MaxIterations_Spinner = new JSpinner(new SpinnerNumberModel(1000, 1, 10000, 10));
+            MaxIterations_Spinner = new JSpinner(new SpinnerNumberModel(1000, 1, 10000, 10));
             frame.add(MaxIterations_Spinner, gbc);
       
             gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 3;
-            JButton Start_Button = new JButton("Start!");
+            Start_Button = new JButton("Start!");
             Start_Button.addActionListener(new ActionListener() { 
                 public void actionPerformed(ActionEvent e) { 
                   ButtonHandler(e);
