@@ -29,6 +29,7 @@ import javax.swing.*;
 class GUI extends JPanel implements guiInterface{
     static Controller controller;
 
+    static GUI panel;
     static JFrame frame;
     static int frame_width = 600;
     static int frame_height = 700;
@@ -65,7 +66,7 @@ class GUI extends JPanel implements guiInterface{
     public GUI() throws IOException {
         // Bild erstellen
         img = new BufferedImage(bufimg_width, bufimg_height, BufferedImage.TYPE_INT_ARGB);
-        System.out.println("Working Directory: " + System.getProperty("user.dir"));
+        /*System.out.println("Working Directory: " + System.getProperty("user.dir"));
         File file = new File("src/main/java/vs_beleg_ateg/gui/mandel.jpg");
         BufferedImage mandelimage = ImageIO.read(file);
 
@@ -78,6 +79,7 @@ class GUI extends JPanel implements guiInterface{
         g2d.setFont(font);
         g2d.drawString("Hello World GUI :)", 20, 70);
         g2d.dispose();  // Grafikobjekt freigeben
+        */
     }
 
     static void ButtonHandler(ActionEvent e){
@@ -105,7 +107,7 @@ class GUI extends JPanel implements guiInterface{
             frame.setLocationRelativeTo(null);
     
             // JPanel erstellen, zum frame hinzufügen
-            GUI panel = new GUI();
+            panel = new GUI();
             frame.setLayout(new GridBagLayout());
     
             GridBagConstraints gbc = new GridBagConstraints();
@@ -192,6 +194,11 @@ class GUI extends JPanel implements guiInterface{
 
         frame.setVisible(true);
         panel.repaint();
+    }
+
+    public void givePixelData(BufferedImage newImage) {
+        img = newImage;
+        repaint(); // forciert Neuzeichnung
     }
 
     @Override
