@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vs_beleg_ateg.gui.*;
-import vs_beleg_ateg.worker.Task;
-import vs_beleg_ateg.worker.TaskResult;
-import vs_beleg_ateg.worker.WorkerInterface;
+import vs_beleg_ateg.worker.*;
 
 public class Controller {
 
