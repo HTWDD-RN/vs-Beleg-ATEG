@@ -14,10 +14,15 @@
 // -> GUI gibt an Controller weiter
 package vs_beleg_ateg.gui;
 
+import vs_beleg_ateg.controller.*;
+
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+//import java.lang.ModuleLayer.Controller;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -31,6 +36,15 @@ class GUI extends JPanel{
     static BufferedImage img;
     static int bufimg_width = 600;
     static int bufimg_height = 300;
+
+    static JLabel Res_Label;
+    JSpinner ResWidth_Spinner;
+    JSpinner ResHeight_Spinner;
+    JLabel Zoompoint_Label;
+    JSpinner ZoompointX_Spinner
+    JSpinner ZoompointY_Spinner
+
+
 
     // Konstruktor
     public GUI() throws IOException {
@@ -51,82 +65,98 @@ class GUI extends JPanel{
         g2d.dispose();  // Grafikobjekt freigeben
     }
 
-    public static void main(String[] args) throws IOException{
-        frame = new JFrame("GUI für Mandelbrot");
-        frame.setSize(frame_width, frame_height);
-        frame.setMinimumSize(new Dimension(frame_width, frame_height));
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
+    static void ButtonHandler(ActionEvent e){
+            if (e.getActionCommand().equals("Start!")){
+                System.out.println("Start Button pressed!");
 
-        // JPanel erstellen, zum frame hinzufügen
-        GUI panel = new GUI();
-        frame.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(5, 5, 5, 5); // Abstand zwischen Komponenten
-
-        gbc.gridx = 0; gbc.gridy = 0;
-        gbc.gridwidth = 3; 
-        gbc.weightx = 1.0; gbc.weighty = 1; 
-        frame.add(panel, gbc); // BufferedImage
-
-        gbc.gridwidth = 1;
-        gbc.weightx = 1.0; gbc.weighty = 0.03; 
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Komponenten hinzufügen
-        gbc.gridx = 0; gbc.gridy = 1;
-        JLabel Res_Label = new JLabel("Auflösung (Breite/Höhe): ");
-        frame.add(Res_Label, gbc);
-        gbc.gridx = 1; gbc.gridy = 1;
-        JSpinner ResWidth_Spinner = new JSpinner(new SpinnerNumberModel(1024, 1, 10000, 10));
-        frame.add(ResWidth_Spinner, gbc);
-        gbc.gridx = 2; gbc.gridy = 1;
-        JSpinner ResHeight_Spinner = new JSpinner(new SpinnerNumberModel(768, 1, 10000, 10));
-        frame.add(ResHeight_Spinner, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        JLabel Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
-        frame.add(Zoompoint_Label, gbc);
-        gbc.gridx = 1; gbc.gridy = 2;
-        JSpinner ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -2.5, 1, 0.001));
-        frame.add(ZoompointX_Spinner, gbc);
-        gbc.gridx = 2; gbc.gridy = 2;
-        JSpinner ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -1.5, 1.5, 0.001));
-        frame.add(ZoompointY_Spinner, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        JLabel Zoomfactor_Label = new JLabel("Zoomfaktor: ");
-        frame.add(Zoomfactor_Label, gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
-        JSpinner Zoomfactor_Spinner = new JSpinner(new SpinnerNumberModel(0.8, 0.1, 2, 0.001));
-        frame.add(Zoomfactor_Spinner, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4;
-        JLabel StepNumber_Label = new JLabel("Stufenanzahl: ");
-        frame.add(StepNumber_Label, gbc);
-        gbc.gridx = 1; gbc.gridy = 4;
-        JSpinner StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
-        frame.add(StepNumber_Spinner, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 5;
-        JLabel WorkerNumber_Label = new JLabel("Anzahl Worker: ");
-        frame.add(WorkerNumber_Label, gbc);
-        gbc.gridx = 1; gbc.gridy = 5;
-        JSpinner WorkerNumber_Spinner = new JSpinner(new SpinnerNumberModel(4, 1, 64, 1));
-        frame.add(WorkerNumber_Spinner, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 6;
-        JLabel MaxIterations_Label = new JLabel("Max. Iterationsanzahl: ");
-        frame.add(MaxIterations_Label, gbc);
-        gbc.gridx = 1; gbc.gridy = 6;
-        JSpinner MaxIterations_Spinner = new JSpinner(new SpinnerNumberModel(1000, 1, 10000, 10));
-        frame.add(MaxIterations_Spinner, gbc);
-  
-        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 3;
-        JButton Start_Button = new JButton("Start!");
+                // Werte bekommen
+                Res_Label.getValue() + "";
+                //Controller.setVars();
+            }
+        }
+    
+        public static void main(String[] args) throws IOException{
+            frame = new JFrame("GUI für Mandelbrot");
+            frame.setSize(frame_width, frame_height);
+            frame.setMinimumSize(new Dimension(frame_width, frame_height));
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+    
+            // JPanel erstellen, zum frame hinzufügen
+            GUI panel = new GUI();
+            frame.setLayout(new GridBagLayout());
+    
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.insets = new Insets(5, 5, 5, 5); // Abstand zwischen Komponenten
+    
+            gbc.gridx = 0; gbc.gridy = 0;
+            gbc.gridwidth = 3; 
+            gbc.weightx = 1.0; gbc.weighty = 1; 
+            frame.add(panel, gbc); // BufferedImage
+    
+            gbc.gridwidth = 1;
+            gbc.weightx = 1.0; gbc.weighty = 0.03; 
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+    
+            // Komponenten hinzufügen
+            gbc.gridx = 0; gbc.gridy = 1;
+            Res_Label = new JLabel("Auflösung (Breite/Höhe): ");
+            frame.add(Res_Label, gbc);
+            gbc.gridx = 1; gbc.gridy = 1;
+            ResWidth_Spinner = new JSpinner(new SpinnerNumberModel(1024, 1, 10000, 10));
+            frame.add(ResWidth_Spinner, gbc);
+            gbc.gridx = 2; gbc.gridy = 1;
+            ResHeight_Spinner = new JSpinner(new SpinnerNumberModel(768, 1, 10000, 10));
+            frame.add(ResHeight_Spinner, gbc);
+    
+            gbc.gridx = 0; gbc.gridy = 2;
+            JLabel Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
+            frame.add(Zoompoint_Label, gbc);
+            gbc.gridx = 1; gbc.gridy = 2;
+            JSpinner ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -2.5, 1, 0.001));
+            frame.add(ZoompointX_Spinner, gbc);
+            gbc.gridx = 2; gbc.gridy = 2;
+            JSpinner ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(0.5, -1.5, 1.5, 0.001));
+            frame.add(ZoompointY_Spinner, gbc);
+    
+            gbc.gridx = 0; gbc.gridy = 3;
+            JLabel Zoomfactor_Label = new JLabel("Zoomfaktor: ");
+            frame.add(Zoomfactor_Label, gbc);
+            gbc.gridx = 1; gbc.gridy = 3;
+            JSpinner Zoomfactor_Spinner = new JSpinner(new SpinnerNumberModel(0.8, 0.1, 2, 0.001));
+            frame.add(Zoomfactor_Spinner, gbc);
+    
+            gbc.gridx = 0; gbc.gridy = 4;
+            JLabel StepNumber_Label = new JLabel("Stufenanzahl: ");
+            frame.add(StepNumber_Label, gbc);
+            gbc.gridx = 1; gbc.gridy = 4;
+            JSpinner StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
+            frame.add(StepNumber_Spinner, gbc);
+    
+            gbc.gridx = 0; gbc.gridy = 5;
+            JLabel WorkerNumber_Label = new JLabel("Anzahl Worker: ");
+            frame.add(WorkerNumber_Label, gbc);
+            gbc.gridx = 1; gbc.gridy = 5;
+            JSpinner WorkerNumber_Spinner = new JSpinner(new SpinnerNumberModel(4, 1, 64, 1));
+            frame.add(WorkerNumber_Spinner, gbc);
+    
+            gbc.gridx = 0; gbc.gridy = 6;
+            JLabel MaxIterations_Label = new JLabel("Max. Iterationsanzahl: ");
+            frame.add(MaxIterations_Label, gbc);
+            gbc.gridx = 1; gbc.gridy = 6;
+            JSpinner MaxIterations_Spinner = new JSpinner(new SpinnerNumberModel(1000, 1, 10000, 10));
+            frame.add(MaxIterations_Spinner, gbc);
+      
+            gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 3;
+            JButton Start_Button = new JButton("Start!");
+            Start_Button.addActionListener(new ActionListener() { 
+                public void actionPerformed(ActionEvent e) { 
+                  ButtonHandler(e);
+            } 
+          } );
         frame.add(Start_Button, gbc);
 
         gbc.gridx = 0; gbc.gridy = 8; gbc.gridwidth = 3;

@@ -1,12 +1,15 @@
 package vs_beleg_ateg.controller;
 
-import vs_beleg_ateg.worker.*;
-import java.awt.image.BufferedImage;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
+
+import vs_beleg_ateg.worker.Task;
+import vs_beleg_ateg.worker.TaskResult;
+import vs_beleg_ateg.worker.WorkerInterface;
 
 public class Controller {
 
@@ -68,7 +71,7 @@ public class Controller {
                 for (int y = 0; y < result.getHeight(); y++) {
                     int iter = result.getPixelData()[x][y];
                     int color = iterToColor(iter, maxIterations);
-                    resultImage.setRGB(x, task.getY() + y, color);
+                    resultImage.setRGB(x, task.getStartY() + y, color);
                 }
             }
         }
