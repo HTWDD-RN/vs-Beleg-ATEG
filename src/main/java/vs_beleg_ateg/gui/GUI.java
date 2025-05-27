@@ -18,13 +18,15 @@ import vs_beleg_ateg.controller.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 //import java.lang.ModuleLayer.Controller;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+
+import vs_beleg_ateg.controller.Controller;
 
 public class GUI extends JPanel implements guiInterface{
     static Controller controller;
@@ -82,22 +84,22 @@ public class GUI extends JPanel implements guiInterface{
         */
     }
 
-    static void ButtonHandler(ActionEvent e){
+    void ButtonHandler(ActionEvent e){
         if (e.getActionCommand().equals("Start!")){
             System.out.println("Start Button pressed!");
             // Werte bekommen
             int ResWidth = (Integer)ResWidth_Spinner.getValue();
             int ResHeight = (Integer)ResHeight_Spinner.getValue();
             double ZoompointX = (Double)ZoompointX_Spinner.getValue();
-            double ZoompointY =  (Double)ZoompointY_Spinner.getValue();
+            double ZoompointY = (Double)ZoompointY_Spinner.getValue();
             double Zoomfactor = (Double)Zoomfactor_Spinner.getValue();
             int StepNumber = (Integer)StepNumber_Spinner.getValue(); 
             int WorkerNumber = (Integer) WorkerNumber_Spinner.getValue();  
             int MaxIterations = (Integer)MaxIterations_Spinner.getValue();
-            // an Controller übergeben
-            controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber);
-        }
+            
+            controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber, this);
     }
+}
     
         public static void main(String[] args) throws IOException{
             frame = new JFrame("GUI für Mandelbrot");
@@ -177,7 +179,7 @@ public class GUI extends JPanel implements guiInterface{
             Start_Button = new JButton("Start!");
             Start_Button.addActionListener(new ActionListener() { 
                 public void actionPerformed(ActionEvent e) { 
-                  ButtonHandler(e);
+                    panel.ButtonHandler(e);
             } 
           } );
         frame.add(Start_Button, gbc);

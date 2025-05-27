@@ -1,14 +1,16 @@
 package vs_beleg_ateg.controller;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import vs_beleg_ateg.gui.*;
-import vs_beleg_ateg.worker.*;
+import vs_beleg_ateg.gui.GUI;
+import vs_beleg_ateg.gui.guiInterface;
+import vs_beleg_ateg.worker.Task;
+import vs_beleg_ateg.worker.TaskResult;
+import vs_beleg_ateg.worker.WorkerInterface;
 
 public class Controller {
 
