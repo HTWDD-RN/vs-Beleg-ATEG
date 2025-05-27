@@ -21,6 +21,5 @@ public class Task {
     public int getWidth() { return width; }
     public int getHeight() { return height; }
     public int getIteration() { return iteration; }
-    public void setIteration(int iteration) { this.iteration = iteration; }
     
 }
