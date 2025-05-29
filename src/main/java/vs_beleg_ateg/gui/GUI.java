@@ -220,11 +220,11 @@ public class GUI extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        /* if (img != null) { // zentriert zeichnen
+         if (img != null) { // zentriert zeichnen
             int x = (getWidth() - img.getWidth()) / 2;
             int y = (getHeight() - img.getHeight()) / 2;
             g.drawImage(img, x, y, this);
-        } */
-        g.drawImage(img, 0, 0, null);
+        } 
+        //g.drawImage(img, 0, 0, null);
     }
 }
