@@ -1,8 +1,11 @@
 package vs_beleg_ateg.controller;
 import java.awt.Color;
 import vs_beleg_ateg.gui.GUI;
+import vs_beleg_ateg.worker.*;
 
 public class Controller {
+    int WORKER = 4;
+
     private int imageWidth, imageHeight;
     private double zoomPointX, zoomPointY;
     private double zoomFactor;
@@ -32,6 +35,14 @@ public class Controller {
 
             //TODO
             //schicke Variables an Workers
+            TaskResult workerResults[];
+            for(int j = 0;j < WORKER;j++){
+                Task task = new Task(xmin, ymin,xmax, ymax,imageWidth,imageHeight);
+                WorkerImpl worker = new WorkerImpl(task);
+                workerResults[j] = worker.computeTask(task);
+                };
+
+            }
             c = bild_rechnen_worker(maxIterations, imageWidth, imageHeight, xmin, xmax, ymin, ymax);
 
             //zeichne das Bild
