@@ -22,6 +22,10 @@ public class Task {
 
     // Getter-Methoden für die Task-Parameter
     public double getStartX() { return startX; }
+    public double getEndX() {return endX;
+    }
+    public double getEndY() {return endY;
+    }
     public double getStartY() { return startY; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }

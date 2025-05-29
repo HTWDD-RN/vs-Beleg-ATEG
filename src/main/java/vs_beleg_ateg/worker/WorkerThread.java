@@ -13,15 +13,24 @@ public class WorkerThread extends Thread {
 
     @Override
     public void run() {
-        int i,j = 0;
-        if (task != null) {
-            int iteration = task.getIteration();
-            //Verarbeite den Task (Berechnung)
-            for(i= task.getStartX() ;i< task.getWidth();i++)
-                for(j = task.getStartY(); i< task.getHeight();i++){
-                     int pixel = computeMandelbrot(i, j,iteration);
-                     result.setPixel(pixel, i, j);
-                }
+        int width = task.getWidth();
+        int height = task.getHeight();
+        int iteration = task.getIteration();
+
+        double xStart = task.getStartX();
+        double yStart = task.getStartY();
+        double xEnd = task.getEndX();
+        double yEnd = task.getEndY();
+
+        for (int px = 0; px < width; px++) {
+            for (int py = 0; py < height; py++) {
+                // Umrechnung von Pixelkoordinaten in double-Koordinaten
+                double x = xStart + px * (xEnd - xStart) / (width - 1);
+                double y = yStart + py * (yEnd - yStart) / (height - 1);
+
+                int pixelValue = computeMandelbrot(x, y, iteration);
+                result.setPixel(pixelValue, px, py);
+            }
         }
     }
 
