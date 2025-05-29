@@ -21,11 +21,6 @@ public class Controller {
         this.gui = gui;
     }
 
-    //TODO
-    //while round                               OK
-    //ci cr, zoom berechnen                     OK
-    //schick werte an der worker                OK
-    //fertig                                    OK
 
     public void startComputation(){
         Color[][] c = new Color[imageWidth][imageHeight];
