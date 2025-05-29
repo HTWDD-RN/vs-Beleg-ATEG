@@ -36,7 +36,7 @@ public class Controller {
         int x_length = imageWidth/thread_sum;
         Color[][] bild = new Color[imageWidth][imageHeight];
         
-        for (int i = 1; i < stepCount; i++) { // Round loop
+        for (int i = 1; i <= stepCount; i++) { // Round loop
             for (int j = 0; j < thread_sum; j++) {
                 final int x_start = x_length * j;
                 final int x_stop = (j == thread_sum - 1) ? imageWidth : x_start + x_length;
@@ -71,7 +71,7 @@ public class Controller {
             ymin = zoomPointY - ydim / 2 / zoomFactor;
             ymax = zoomPointY + ydim / 2 / zoomFactor;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
