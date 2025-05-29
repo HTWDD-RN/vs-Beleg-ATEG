@@ -98,7 +98,8 @@ public class GUI extends JPanel implements guiInterface{
             int MaxIterations = (Integer)MaxIterations_Spinner.getValue();
             
             controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber, this);
-    }
+            controller.startComputation();
+        }
 }
     
         public static void main(String[] args) throws IOException{
