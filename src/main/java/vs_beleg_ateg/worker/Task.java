@@ -10,11 +10,14 @@ public class Task {
     private int iteration;
 
     
-    public Task(double startX, double startY,double endX,double endY, int width, int height) {
+    public Task(double startX, double startY,double endX,double endY, int width, int height, int iteration) {
         this.startX = startX;
         this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
         this.width = width;
         this.height = height;
+        this.iteration = iteration;
     }
 
     // Getter-Methoden für die Task-Parameter
