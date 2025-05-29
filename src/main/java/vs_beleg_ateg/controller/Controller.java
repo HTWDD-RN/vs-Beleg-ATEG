@@ -37,7 +37,7 @@ public class Controller {
             //schicke Variables an Workers
             TaskResult workerResults[];
             for(int j = 0;j < WORKER;j++){
-                Task task = new Task(xmin, ymin,xmax, ymax,imageWidth,imageHeight);
+                Task task = new Task(xmin, ymin,xmax, ymax,imageWidth,imageHeight,i);
                 WorkerImpl worker = new WorkerImpl(task);
                 workerResults[j] = worker.computeTask(task);
                 };
