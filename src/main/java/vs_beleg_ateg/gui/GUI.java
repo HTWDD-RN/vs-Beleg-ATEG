@@ -12,6 +12,7 @@
 // StartButton
 // Fortschrittsleiste (1/4 Workern fertig)
 // -> GUI gibt an Controller weiter
+// -> Controller muss sagen, wenn fertig (Button deaktiveren solange)
 package vs_beleg_ateg.gui;
 
 import vs_beleg_ateg.controller.*;
@@ -126,7 +127,7 @@ public class GUI extends JPanel{
             frame.add(panel, gbc); // BufferedImage
     
             gbc.gridwidth = 1;
-            gbc.weightx = 1.0; gbc.weighty = 0.03; 
+            gbc.weightx = 1.0; gbc.weighty = 0.001; 
             gbc.fill = GridBagConstraints.HORIZONTAL;
     
             // Komponenten hinzufügen
@@ -200,12 +201,6 @@ public class GUI extends JPanel{
         frame.setVisible(true);
         panel.repaint();
     }
-
-    /* public void givePixelData(BufferedImage newImage) {
-        System.out.printf("Got stuff!");
-        img = newImage;
-        repaint(); // forciert Neuzeichnung
-    } */
     
     public void givePixelData(Color[][] c, int xpix, int ypix) {
         for (int y = 0; y < ypix; y++) {
@@ -224,7 +219,6 @@ public class GUI extends JPanel{
             int x = (getWidth() - img.getWidth()) / 2;
             int y = (getHeight() - img.getHeight()) / 2;
             g.drawImage(img, x, y, this);
-        } 
-        //g.drawImage(img, 0, 0, null);
+        }
     }
 }
