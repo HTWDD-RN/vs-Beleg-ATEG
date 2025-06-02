@@ -1,6 +1,10 @@
 package vs_beleg_ateg.controller;
 import java.awt.Color;
 import vs_beleg_ateg.gui.GUI;
+import vs_beleg_ateg.worker.Task;
+import vs_beleg_ateg.worker.TaskResult;
+import vs_beleg_ateg.worker.WorkerImpl;
+import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 
 public class Controller {
     private int imageWidth, imageHeight;
@@ -22,28 +26,32 @@ public class Controller {
         this.gui = gui;
     }
 
-    //TODO
-    //while round                               OK
-    //ci cr, zoom berechnen                     OK
-    //schick werte an der worker                OK
-    //fertig                                    OK
-
     public void startComputation(){
-
+        // bild in 4 vertikale Streifen teilen
         int thread_sum = 4;
         Thread[] threads = new Thread[thread_sum];
+        TaskResult[] results = new TaskResult[thread_sum];
 
         int x_length = imageWidth/thread_sum;
         Color[][] bild = new Color[imageWidth][imageHeight];
         
         for (int i = 1; i <= stepCount; i++) { // Round loop
             for (int j = 0; j < thread_sum; j++) {
-                final int x_start = x_length * j;
-                final int x_stop = (j == thread_sum - 1) ? imageWidth : x_start + x_length;
+                final int threadIndex = j; //worker 0-3
+                final int x_start = x_length * j; //Startindex in X-Richtung (Pixel), ab wo dieser Task rechnen soll. fängt von 0
+                final int x_stop = (j == thread_sum - 1) ? imageWidth : x_start + x_length; //Ende des Pixelbereichs.
 
                 threads[j] = new Thread(() -> {
-                    Color[][] bild_teil = bild_rechnen_worker(maxIterations, imageWidth, imageHeight, xmin, xmax, ymin, ymax, x_start, x_stop);
-
+                //TODO
+                // MandelbrotCalculator soll am Ende 2 Dim Array zurückgeben
+                Color[][] bild_teil = MandelbrotCalculator(maxIterations, imageWidth, imageHeight, xmin, xmax, ymin, ymax, x_start, x_stop);
+                
+                // Task mit Parametern erstellen
+                Task task = new Task(x_start, x_stop, imageHeight, maxIterations, xmin, xmax, ymin, ymax);
+                // Worker direkt lokal aufrufen
+                WorkerImpl worker = new WorkerImpl(task);
+                TaskResult result = worker.computeTask(task);
+                results[threadIndex] = result;
                     for (int x = x_start; x < x_stop; x++) {
                         for (int y = 0; y < imageHeight; y++) {
                             bild[x][y] = bild_teil[x][y];
