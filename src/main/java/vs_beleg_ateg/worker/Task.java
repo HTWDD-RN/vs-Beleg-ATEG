@@ -9,7 +9,7 @@ public class Task {
     private int height;
     private int iteration;
 
-    
+    //Anpassen Bild wird in 4 vertikale Streifen geteilt, Hohe bleibt gleich
     public Task(double startX, double startY,double endX,double endY, int width, int height, int iteration) {
         this.startX = startX;
         this.startY = startY;
