@@ -30,61 +30,50 @@ public class Controller {
 
     public void startComputation(){
         // bild in 4 vertikale Streifen teilen
-        int thread_sum = 4;
-        Thread[] threads = new Thread[thread_sum];
-        TaskResult[] results = new TaskResult[thread_sum];
+        int thread_count = 4;
+        Thread[] threads = new Thread[thread_count];
+        TaskResult[] results = new TaskResult[thread_count];
 
-        int x_length = imageWidth/thread_sum;
+        int x_length = imageWidth/thread_count;
         Color[][] bild = new Color[imageWidth][imageHeight];
         int i;
         for (i = 1; i <= stepCount; i++) { // Round loop
-            //for (int j = 0; j < thread_sum; j++) {
-                //int threadIndex = j; //worker 0-3
-                //final double x_start = x_length * j; //Startindex in X-Richtung (Pixel), ab wo dieser Task rechnen soll. fängt von 0
-                //final int x_stop = (j == thread_sum - 1) ? imageWidth : x_start + x_length; //Ende des Pixelbereichs.
+            for (int j = 0; j < thread_count; j++) {
+                final int threadIndex = j; //worker 0-3
+                final int x_startPixel = x_length * j; //Startindex in X-Richtung (Pixel), ab wo dieser Task rechnen soll. fängt von 0
+                final int x_stopPixel = (j == thread_count - 1) ? imageWidth : x_startPixel + x_length; //Ende des Pixelbereichs.
 
-                //threads[j] = new Thread(() -> {
-                    //TODO
-                    // MandelbrotCalculator soll am Ende 2 Dim Array zurückgeben
-                    //Color[][] bild_teil = MandelbrotCalculator(maxIterations, imageWidth, imageHeight, xmin, xmax, ymin, ymax, x_start, x_stop);
-                    
-                    // Task mit Parametern erstellen
-                    //Task task = new Task(x_start, 0,  x_stop, imageHeight, xmin, xmax, ymin, ymax);
-                    try{
-                        Task task = new Task(xmin,ymin, xmax, ymax, imageWidth, imageHeight, maxIterations);
-                        // Worker direkt lokal aufrufen
+                double xStart = xmin + (x_startPixel / (double) imageWidth) * (xmax - xmin);
+                double xEnd = xmin + (x_stopPixel / (double) imageWidth) * (xmax - xmin);
+
+                Task task = new Task(
+                    xStart, ymin,   // reale Startkoordinaten (x, y)
+                    xEnd, ymax,     // reale Endkoordinaten (x, y)
+                    x_stopPixel - x_startPixel, // Breite in Pixeln
+                    imageHeight,
+                    maxIterations
+                );
+
+                threads[j] = new Thread(() -> {
+                    try {
                         WorkerImpl worker = new WorkerImpl(task);
-                        
                         TaskResult result = worker.computeTask(task);
-                        this.gui.givePixelData(result.getPixelData(), imageWidth, imageHeight);
-                        System.out.println("Werte: " +xmin +","+xmax+","+ymin+","+ymax+","+imageWidth+","+imageHeight+","+i);
-                        try{Thread.sleep(1000);}
-                        catch(InterruptedException e){
-                            System.err.println(e);
-                        }
-
-                        /* 
                         results[threadIndex] = result;
-                        for (int x = 0; x < imageWidth; x++) {
-                            for (int y = 0; y < imageHeight; y++) {
-                                bild[x][y] = new Color(result.getPixelData()[x][y]);
-                            }
-                        }*/
+                    } catch (RemoteException e) {
+                        System.err.println("Fehler bei Worker " + threadIndex + ": " + e);
                     }
-                    catch(RemoteException e){
-                        System.err.println(e);
-                    }
-                //});
-                //threads[j].start();
-            //}
-            /* 
+                });
+
+                threads[j].start(); 
+            }
+            
             for (Thread t : threads) {
                 try {
                     t.join();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
 
             //zeichne das Bild
 
@@ -94,8 +83,22 @@ public class Controller {
             xmax = zoomPointX + xdim / 2 / zoomFactor;
             ymin = zoomPointY - ydim / 2 / zoomFactor;
             ymax = zoomPointY + ydim / 2 / zoomFactor;
+
+            int[][] fullImage = new int[imageWidth][imageHeight];
+            for (int j = 0; j < thread_count; j++) {
+                int[][] part = results[j].getPixelData();
+                int xOffset = j * x_length;
+
+                for (int x = 0; x < part.length; x++) {
+                    for (int y = 0; y < imageHeight; y++) {
+                        fullImage[xOffset + x][y] = part[x][y];
+                    }
+                }
+            }
+            gui.givePixelData(fullImage, imageWidth, imageHeight);
+
             try {
-                Thread.sleep(100);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
