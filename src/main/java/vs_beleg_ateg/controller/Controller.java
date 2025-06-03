@@ -106,48 +106,4 @@ public class Controller {
             }
         }
     }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //MUSS AUF WORKER VERSCHOBEN WERDEN
-    private Color[][] bild_rechnen_worker(int max_iter, int xpix, int ypix, double xmin, double xmax, double ymin, double ymax, int x_start, int x_stop) {
-        //TODO: MUSS AUF WORKER x_start, x_stop IMPLEMENTIEREN!!!
-        
-        Color[][] colors = new Color[xpix][ypix];
-
-        for (int y = 0; y < ypix; y++) {
-            double c_im = ymin + (ymax - ymin) * y / ypix;
-
-            for (int x = 0; x < xpix; x++) {
-                double c_re = xmin + (xmax - xmin) * x / xpix;
-                int iter = calc(max_iter, c_re, c_im);
-
-                if (iter == max_iter) {
-                    colors[x][y] = Color.BLACK;
-                } else {
-                    float c = (float) iter / max_iter;
-                    colors[x][y] = Color.getHSBColor(c, 1f, 1f);
-                }
-            }
-        }
-
-        return colors;
-    }
-
-    //MUSS AUF WORKER VERSCHOBEN WERDEN
-    private int calc(int max_iter, double cr, double ci) {
-        int iter;
-        double zr = 0, zi = 0, zr2 = 0, zi2 = 0, zri = 0, betrag = 0;
-        for (iter = 0; iter < max_iter && betrag <= 4.0; iter++) {
-            zr = zr2 - zi2 + cr;
-            zi = zri + zri + ci;
-
-            zr2 = zr * zr;
-            zi2 = zi * zi;
-            zri = zr * zi;
-            betrag = zr2 + zi2;
-        }
-        return iter;
-    }
 }
