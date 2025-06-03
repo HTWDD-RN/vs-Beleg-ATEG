@@ -14,6 +14,7 @@ public class Controller {
     private double zoomFactor;
     private int stepCount;
     private int maxIterations;
+    private int workerCount;
     private GUI gui;
     double xmin = -1.666, xmax = 1, ymin = -1, ymax = 1;
 
@@ -24,13 +25,14 @@ public class Controller {
         this.zoomPointY = zoomPointY;
         this.zoomFactor = zoomFactor;
         this.stepCount = stepCount;
+        this.workerCount =  workerCount;
         this.maxIterations = maxIterations;
         this.gui = gui;
     }
 
     public void startComputation(){
         // bild in 4 vertikale Streifen teilen
-        int thread_count = 4;
+        int thread_count = workerCount;
         Thread[] threads = new Thread[thread_count];
         TaskResult[] results = new TaskResult[thread_count];
 
