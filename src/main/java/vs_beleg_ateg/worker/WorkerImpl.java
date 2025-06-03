@@ -9,8 +9,11 @@ import vs_beleg_ateg.worker.Task;
 public class WorkerImpl extends UnicastRemoteObject
     implements WorkerInterface {
     Task task;
-    public WorkerImpl(Task newTask) throws RemoteException{
+    Controller master;
+
+    public WorkerImpl(Controller master,Task newTask) throws RemoteException{
         this.task = newTask;
+        this.master = master;
     }
     
     public TaskResult computeTask(Task task) throws RemoteException{

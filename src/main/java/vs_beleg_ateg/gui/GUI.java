@@ -202,7 +202,7 @@ public class GUI extends JPanel{
         panel.repaint();
     }
     
-    public void givePixelData(Color[][] c, int xpix, int ypix) {
+    public void givePixelData(int[][] c, int xpix, int ypix) {
         // GUI updaten
         imagesDone++;
 
@@ -220,7 +220,8 @@ public class GUI extends JPanel{
         for (int y = 0; y < ypix; y++) {
             for (int x = 0; x < xpix; x++) {
                 //System.out.println(c[x][y].getRGB());
-                if (c[x][y] != null) img.setRGB(x, y, c[x][y].getRGB());
+                //if (c[x][y] != 0) 
+                    img.setRGB(x, y, c[x][y]);
             }
         }
         repaint(); // forciert Neuzeichnung
