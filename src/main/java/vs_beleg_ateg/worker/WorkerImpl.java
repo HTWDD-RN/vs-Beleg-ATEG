@@ -10,8 +10,8 @@ public class WorkerImpl extends UnicastRemoteObject
     implements WorkerInterface {
     Task task;
 
-    public WorkerImpl(Task newTask) throws RemoteException{
-        this.task = newTask;
+    public WorkerImpl() throws RemoteException{
+        //this.task = newTask;
     }
     
     public TaskResult computeTask(Task task) throws RemoteException{
