@@ -51,7 +51,7 @@ public class Controller {
                     // Task mit Parametern erstellen
                     //Task task = new Task(x_start, 0,  x_stop, imageHeight, xmin, xmax, ymin, ymax);
                     try{
-                        Task task = new Task(xmin,ymin, xmax, ymax, imageWidth, imageHeight, i);
+                        Task task = new Task(xmin,ymin, xmax, ymax, imageWidth, imageHeight, maxIterations);
                         // Worker direkt lokal aufrufen
                         WorkerImpl worker = new WorkerImpl(task);
                         
