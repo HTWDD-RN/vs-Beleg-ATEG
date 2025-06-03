@@ -222,6 +222,7 @@ public class GUI extends JPanel{
                 //System.out.println(c[x][y].getRGB());
                 //if (c[x][y] != 0) 
                     img.setRGB(x, y, c[x][y]);
+                    //System.out.println("Farbe: "+c[x][y]);
             }
         }
         repaint(); // forciert Neuzeichnung

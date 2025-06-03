@@ -53,9 +53,15 @@ public class Controller {
                     try{
                         Task task = new Task(xmin,ymin, xmax, ymax, imageWidth, imageHeight, i);
                         // Worker direkt lokal aufrufen
-                        WorkerImpl worker = new WorkerImpl(this,task);
+                        WorkerImpl worker = new WorkerImpl(task);
+                        
                         TaskResult result = worker.computeTask(task);
                         this.gui.givePixelData(result.getPixelData(), imageWidth, imageHeight);
+                        System.out.println("Werte: " +xmin +","+xmax+","+ymin+","+ymax+","+imageWidth+","+imageHeight+","+i);
+                        try{Thread.sleep(1000);}
+                        catch(InterruptedException e){
+                            System.err.println(e);
+                        }
 
                         /* 
                         results[threadIndex] = result;
