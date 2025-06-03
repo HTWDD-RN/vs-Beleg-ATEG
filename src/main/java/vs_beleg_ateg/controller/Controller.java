@@ -10,6 +10,7 @@ import vs_beleg_ateg.worker.WorkerInterface;
 import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 
 public class Controller {
+    int PORT = 1199;
     private int imageWidth, imageHeight;
     private double zoomPointX, zoomPointY;
     private double zoomFactor;
@@ -122,6 +123,7 @@ import vs_beleg_ateg.worker.TaskResult;
 import vs_beleg_ateg.worker.WorkerInterface;
 
 public class Controller {
+    int PORT = 1199;
     private int imageWidth, imageHeight;
     private double zoomPointX, zoomPointY;
     private double zoomFactor;
@@ -152,8 +154,8 @@ public class Controller {
         // Lookup Workers
         WorkerInterface[] workers = new WorkerInterface[threadCount];
         try {
-            for (int i = 0; i < threadCount; i++) {
-                workers[i] = (WorkerInterface) Naming.lookup("rmi://localhost/worker" + i);
+            Registry registry = LocateRegistry.getRegistry(PORT);
+            for (int i = 0; i < threadCount; i++) {Worker" + (i+1));
             }
         } catch (Exception e) {
             System.err.println("RMI Lookup fehlgeschlagen: " + e);

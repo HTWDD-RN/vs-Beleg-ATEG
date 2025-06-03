@@ -21,7 +21,8 @@ public class WorkerThread extends Thread {
         double yStart = task.getStartY();
         double xEnd = task.getEndX();
         double yEnd = task.getEndY();
-
+        //px: x-Pixel; py: y-Pixel; 
+        //x: x-Koordinate; y: y-Koordinate
         for (int px = 0; px < width; px++) {
             for (int py = 0; py < height; py++) {
                 // Umrechnung von Pixelkoordinaten in double-Koordinaten
