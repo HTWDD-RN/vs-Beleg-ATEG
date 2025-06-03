@@ -38,23 +38,24 @@ public class Controller {
         for (int i = 1; i <= stepCount; i++) { // Round loop
             for (int j = 0; j < thread_sum; j++) {
                 final int threadIndex = j; //worker 0-3
-                final int x_start = x_length * j; //Startindex in X-Richtung (Pixel), ab wo dieser Task rechnen soll. fängt von 0
-                final int x_stop = (j == thread_sum - 1) ? imageWidth : x_start + x_length; //Ende des Pixelbereichs.
+                //final double x_start = x_length * j; //Startindex in X-Richtung (Pixel), ab wo dieser Task rechnen soll. fängt von 0
+                //final int x_stop = (j == thread_sum - 1) ? imageWidth : x_start + x_length; //Ende des Pixelbereichs.
 
                 threads[j] = new Thread(() -> {
-                //TODO
-                // MandelbrotCalculator soll am Ende 2 Dim Array zurückgeben
-                Color[][] bild_teil = MandelbrotCalculator(maxIterations, imageWidth, imageHeight, xmin, xmax, ymin, ymax, x_start, x_stop);
-                
-                // Task mit Parametern erstellen
-                Task task = new Task(x_start, x_stop, imageHeight, maxIterations, xmin, xmax, ymin, ymax);
-                // Worker direkt lokal aufrufen
-                WorkerImpl worker = new WorkerImpl(task);
-                TaskResult result = worker.computeTask(task);
-                results[threadIndex] = result;
-                    for (int x = x_start; x < x_stop; x++) {
-                        for (int y = 0; y < imageHeight; y++) {
-                            bild[x][y] = bild_teil[x][y];
+                    //TODO
+                    // MandelbrotCalculator soll am Ende 2 Dim Array zurückgeben
+                    //Color[][] bild_teil = MandelbrotCalculator(maxIterations, imageWidth, imageHeight, xmin, xmax, ymin, ymax, x_start, x_stop);
+                    
+                    // Task mit Parametern erstellen
+                    //Task task = new Task(x_start, x_stop, imageHeight, maxIterations, xmin, xmax, ymin, ymax);
+                    Task task = new Task(xmin,0, xmax, ymax, imageWidth,imageHeight, i);
+                    // Worker direkt lokal aufrufen
+                    WorkerImpl worker = new WorkerImpl(task);
+                    TaskResult result = worker.computeTask(task);
+                    results[threadIndex] = result;
+                    for (int x = 0; x < imageWidth; x++) {
+                        for (int y = 0; y < imageWidth; y++) {
+                            bild[x][y] = new Color(result.getPixelData()[x][y]);
                         }
                     }
                 });
