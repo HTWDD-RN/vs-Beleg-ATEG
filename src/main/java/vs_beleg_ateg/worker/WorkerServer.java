@@ -16,9 +16,7 @@ public class WorkerServer {
         String workerId = args[1];
         int port = 1099;
         try {
-            WorkerInterface worker = new WorkerImpl(); // 4 Threads im Pool
-
-            WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 0);
+            WorkerInterface stub = new WorkerImpl();
             
             Registry registry = LocateRegistry.getRegistry(master, port);
 

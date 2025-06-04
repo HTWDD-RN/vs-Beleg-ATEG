@@ -15,9 +15,9 @@ mkdir -p target/test_classes
 
 # Kompiliere alle .java-Dateien
 find src -name "*.java" > sources.txt
-javac -d target -cp target @sources.txt
+javac -d target/test_classes -cp target @sources.txt
 rm sources.txt
 
 # Worker starten mit übergebenem Master-Host und Worker-ID
 echo "Starte Worker mit Master '$MASTER_HOST' und ID '$WORKER_ID'..."
-java -cp target vs_beleg_ateg.worker.WorkerServer "$MASTER_HOST" "$WORKER_ID"
+java -cp target/test_classes vs_beleg_ateg.worker.WorkerServer "$MASTER_HOST" "$WORKER_ID"

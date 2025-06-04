@@ -8,9 +8,7 @@ import java.rmi.Naming;
 import vs_beleg_ateg.gui.GUI;
 import vs_beleg_ateg.worker.Task;
 import vs_beleg_ateg.worker.TaskResult;
-import vs_beleg_ateg.worker.WorkerImpl;
 import vs_beleg_ateg.worker.WorkerInterface;
-import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 
 public class Controller {
     int PORT = 1099;
@@ -72,7 +70,7 @@ public class Controller {
                     imageHeight,
                     maxIterations
                 );
-                
+
                 threads[j] = new Thread(() -> {
                     try {
                         results[threadIndex] = workers[threadIndex].computeTask(task);
