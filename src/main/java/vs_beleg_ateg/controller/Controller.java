@@ -44,7 +44,21 @@ public class Controller {
         try {
             Registry registry = LocateRegistry.getRegistry(PORT);
             for (int i = 0; i < workerCount; i++) {
-                workers[i] = (WorkerInterface) Naming.lookup("rmi://localhost/Worker" + (i+1));
+                boolean connected = false;
+                while (!connected) {
+                    try {
+                        workers[i] = (WorkerInterface) registry.lookup( "Worker" + (i + 1));
+                        System.out.println("Worker " + (i + 1) + " verbunden.");
+                        connected = true;
+                    } catch (Exception e) {
+                        System.out.println("Warte auf Worker " + (i + 1) + "...");
+                        try {
+                            Thread.sleep(1000); // 1 Sekunde warten
+                        } catch (InterruptedException ie) {
+                            ie.printStackTrace();
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             System.err.println("RMI Lookup fehlgeschlagen: " + e);

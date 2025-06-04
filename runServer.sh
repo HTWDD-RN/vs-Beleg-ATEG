@@ -7,7 +7,7 @@ PID=$(lsof -ti tcp:$REGISTRY_PORT)
 
 if [ -z "$PID" ]; then
   echo "Starte RMI-Registry auf Port $REGISTRY_PORT..."
-  rmiregistry $REGISTRY_PORT
+  rmiregistry $REGISTRY_PORT &
   sleep 2
 else
   echo "RMI-Registry läuft bereits mit PID $PID auf Port $REGISTRY_PORT."
