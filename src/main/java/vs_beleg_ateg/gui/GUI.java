@@ -1,3 +1,4 @@
+// Standardwerte
 // Auflösung: 1024 x 768
 // Zoompunkt: -0.34837308755059104, -0.6065038451823017
 // Zoomfaktor: 0.8
@@ -7,16 +8,13 @@
 
 package vs_beleg_ateg.gui;
 
-import vs_beleg_ateg.controller.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
-//import java.lang.ModuleLayer.Controller;
-
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import vs_beleg_ateg.controller.Controller;
@@ -26,8 +24,10 @@ public class GUI extends JPanel{
 
     static GUI panel;
     static JFrame frame;
-    static int frame_width = 1200;
-    static int frame_height = 1000;
+    static int frame_width = 1500;
+    static int frame_height = 900;
+
+    boolean save_img = false;
     
     static Graphics2D g2d;
 
@@ -46,37 +46,26 @@ public class GUI extends JPanel{
     static JSpinner Zoomfactor_Spinner;
     static JLabel Zoomfactor_Label;
 
+    static JLabel MaxIterations_Label;
+    static JSpinner MaxIterations_Spinner;
+
     static JLabel StepNumber_Label;
     static JSpinner StepNumber_Spinner;
 
     static JLabel WorkerNumber_Label;
     static JSpinner WorkerNumber_Spinner; 
 
-    static JLabel MaxIterations_Label;
-    static JSpinner MaxIterations_Spinner;
-
     static JButton Start_Button;
+    static JButton Save_Button;
+
+    static JFileChooser chooser;
 
     static JProgressBar ProgressBar;
     static JTextArea Status_TextArea;
 
     // Konstruktor
     public GUI() throws IOException {
-        // Bild erstellen
-        /*System.out.println("Working Directory: " + System.getProperty("user.dir"));
-        File file = new File("src/main/java/vs_beleg_ateg/gui/mandel.jpg");
-        BufferedImage mandelimage = ImageIO.read(file);
 
-        Graphics2D g2d = img.createGraphics();
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, bufimg_width, bufimg_height); // Bild mit schwarzem Hintergrund füllen
-        g2d.setColor(Color.WHITE);
-        g2d.drawImage(mandelimage, 100, 0, 400, 300, this);
-        Font font = new Font("Bitmap", Font.PLAIN, 64);
-        g2d.setFont(font);
-        g2d.drawString("Hello World GUI :)", 20, 70);
-        g2d.dispose();  // Grafikobjekt freigeben
-        */
     }
 
     void ButtonHandler(ActionEvent e){
@@ -89,7 +78,7 @@ public class GUI extends JPanel{
             double ZoompointY = (Double)ZoompointY_Spinner.getValue();      //ci
             double Zoomfactor = (Double)Zoomfactor_Spinner.getValue();      //zoom
             int StepNumber = (Integer)StepNumber_Spinner.getValue();        //round
-            int WorkerNumber = (Integer) WorkerNumber_Spinner.getValue();   //num workers for parallel calc
+            int WorkerNumber = (Integer)WorkerNumber_Spinner.getValue();    //num workers for parallel calc
             int MaxIterations = (Integer)MaxIterations_Spinner.getValue();  //maxiter
             
             imagesDone = 0;
@@ -102,104 +91,192 @@ public class GUI extends JPanel{
             new Thread(() -> {
                 controller.startComputation();
             }).start();
+        }
+        else if (e.getActionCommand().equals("Stop!")){
+            // Variable setzen für Controller, welcher immer diese überprüft und dann alle Threads stoppt
+        }
+        else if (e.getActionCommand().equals("Bild speichern...")){
+            if (img == null){
+                JOptionPane.showMessageDialog(frame, "Kein Bild zum Speichern vorhanden!");
+                return;
+            }
+            if (imageCount == imagesDone){ // hier kann direkt gespeichert werden, da BufferedImage nicht mehr geändert wird
+                saveImage();
+            }
+            else { // warten bis neues Bild fertiggezeichnet ist und dann speichern
+                this.save_img = true;
+            }
+        }
     }
-}
     
-        public static void main(String[] args) throws IOException{
-            frame = new JFrame("GUI für Mandelbrot");
-            frame.setSize(frame_width, frame_height);
-            frame.setMinimumSize(new Dimension(frame_width, frame_height));
-            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            frame.setLocationRelativeTo(null);
+    public static void main(String[] args) throws IOException{
+        frame = new JFrame("Mandelbrot-ATEG GUI");
+        frame.setSize(frame_width, frame_height);
+        frame.setMinimumSize(new Dimension(frame_width, frame_height));
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+
+        // JPanel erstellen, zum frame hinzufügen
+        panel = new GUI();
+        
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(5, 5, 5, 5); // Abstand zwischen Komponenten
+
+        // Linkes Panel
+        JPanel leftPanel = new JPanel(new GridBagLayout());
+        gbc.gridwidth = 1;
+        gbc.weightx = 1.0; gbc.weighty = 0; 
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Komponenten hinzufügen
+        gbc.gridx = 0; gbc.gridy = 1;
+        Res_Label = new JLabel("Auflösung (Breite/Höhe): ");
+        leftPanel.add(Res_Label, gbc);
+        gbc.gridx = 1; gbc.gridy = 1;
+        ResWidth_Spinner = new JSpinner(new SpinnerNumberModel(1024, 1, 10000, 10));
+        leftPanel.add(ResWidth_Spinner, gbc);
+        gbc.gridx = 2; gbc.gridy = 1;
+        ResHeight_Spinner = new JSpinner(new SpinnerNumberModel(768, 1, 10000, 10));
+        leftPanel.add(ResHeight_Spinner, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
+        leftPanel.add(Zoompoint_Label, gbc);
+        gbc.gridx = 1; gbc.gridy = 2;
+        ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(-0.34837308755059104, -2.5, 1, 0.001));
+        leftPanel.add(ZoompointX_Spinner, gbc);
+        gbc.gridx = 2; gbc.gridy = 2;
+        ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(-0.6065038451823017, -1.5, 1.5, 0.001));
+        leftPanel.add(ZoompointY_Spinner, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        Zoomfactor_Label = new JLabel("Zoomfaktor: ");
+        leftPanel.add(Zoomfactor_Label, gbc);
+        gbc.gridx = 1; gbc.gridy = 3;
+        Zoomfactor_Spinner = new JSpinner(new SpinnerNumberModel(1.3, 0.1, 2, 0.05));
+        leftPanel.add(Zoomfactor_Spinner, gbc);
+        gbc.gridx = 0; gbc.gridy = 4;
+        MaxIterations_Label = new JLabel("Max. Iterationsanzahl: ");
+        leftPanel.add(MaxIterations_Label, gbc);
+        gbc.gridx = 1; gbc.gridy = 4;
+        MaxIterations_Spinner = new JSpinner(new SpinnerNumberModel(1000, 1, 10000, 10));
+        leftPanel.add(MaxIterations_Spinner, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 5;
+        StepNumber_Label = new JLabel("Stufenanzahl: ");
+        leftPanel.add(StepNumber_Label, gbc);
+        gbc.gridx = 1; gbc.gridy = 5;
+        StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
+        leftPanel.add(StepNumber_Spinner, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 6;
+        WorkerNumber_Label = new JLabel("Anzahl Worker: ");
+        leftPanel.add(WorkerNumber_Label, gbc);
+        gbc.gridx = 1; gbc.gridy = 6;
+        WorkerNumber_Spinner = new JSpinner(new SpinnerNumberModel(4, 1, 64, 1));
+        leftPanel.add(WorkerNumber_Spinner, gbc);
     
-            // JPanel erstellen, zum frame hinzufügen
-            panel = new GUI();
-            frame.setLayout(new GridBagLayout());
-    
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.anchor = GridBagConstraints.CENTER;
-            gbc.insets = new Insets(5, 5, 5, 5); // Abstand zwischen Komponenten
-    
-            gbc.gridx = 0; gbc.gridy = 0;
-            gbc.gridwidth = 3; 
-            gbc.weightx = 1.0; gbc.weighty = 1; 
-            frame.add(panel, gbc); // BufferedImage
-    
-            gbc.gridwidth = 1;
-            gbc.weightx = 1.0; gbc.weighty = 0.001; 
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-    
-            // Komponenten hinzufügen
-            gbc.gridx = 0; gbc.gridy = 1;
-            Res_Label = new JLabel("Auflösung (Breite/Höhe): ");
-            frame.add(Res_Label, gbc);
-            gbc.gridx = 1; gbc.gridy = 1;
-            ResWidth_Spinner = new JSpinner(new SpinnerNumberModel(1024, 1, 10000, 10));
-            frame.add(ResWidth_Spinner, gbc);
-            gbc.gridx = 2; gbc.gridy = 1;
-            ResHeight_Spinner = new JSpinner(new SpinnerNumberModel(768, 1, 10000, 10));
-            frame.add(ResHeight_Spinner, gbc);
-    
-            gbc.gridx = 0; gbc.gridy = 2;
-            Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
-            frame.add(Zoompoint_Label, gbc);
-            gbc.gridx = 1; gbc.gridy = 2;
-            ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(-0.34837308755059104, -2.5, 1, 0.001));
-            frame.add(ZoompointX_Spinner, gbc);
-            gbc.gridx = 2; gbc.gridy = 2;
-            ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(-0.6065038451823017, -1.5, 1.5, 0.001));
-            frame.add(ZoompointY_Spinner, gbc);
-    
-            gbc.gridx = 0; gbc.gridy = 3;
-            Zoomfactor_Label = new JLabel("Zoomfaktor: ");
-            frame.add(Zoomfactor_Label, gbc);
-            gbc.gridx = 1; gbc.gridy = 3;
-            Zoomfactor_Spinner = new JSpinner(new SpinnerNumberModel(1.3, 0.1, 2, 0.001));
-            frame.add(Zoomfactor_Spinner, gbc);
-    
-            gbc.gridx = 0; gbc.gridy = 4;
-            StepNumber_Label = new JLabel("Stufenanzahl: ");
-            frame.add(StepNumber_Label, gbc);
-            gbc.gridx = 1; gbc.gridy = 4;
-            StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
-            frame.add(StepNumber_Spinner, gbc);
-    
-            gbc.gridx = 0; gbc.gridy = 5;
-            WorkerNumber_Label = new JLabel("Anzahl Worker: ");
-            frame.add(WorkerNumber_Label, gbc);
-            gbc.gridx = 1; gbc.gridy = 5;
-            WorkerNumber_Spinner = new JSpinner(new SpinnerNumberModel(4, 1, 64, 1));
-            frame.add(WorkerNumber_Spinner, gbc);
-    
-            gbc.gridx = 0; gbc.gridy = 6;
-            MaxIterations_Label = new JLabel("Max. Iterationsanzahl: ");
-            frame.add(MaxIterations_Label, gbc);
-            gbc.gridx = 1; gbc.gridy = 6;
-            MaxIterations_Spinner = new JSpinner(new SpinnerNumberModel(1000, 1, 10000, 10));
-            frame.add(MaxIterations_Spinner, gbc);
-      
-            gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 3;
-            Start_Button = new JButton("Start!");
-            Start_Button.addActionListener(new ActionListener() { 
-                public void actionPerformed(ActionEvent e) { 
-                    panel.ButtonHandler(e);
+        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 3;
+        Start_Button = new JButton("Start!");
+        Start_Button.addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) { 
+                panel.ButtonHandler(e);
             } 
-          } );
-        frame.add(Start_Button, gbc);
+        });
+        leftPanel.add(Start_Button, gbc);
 
         gbc.gridx = 0; gbc.gridy = 8; gbc.gridwidth = 3;
+        Save_Button = new JButton("Bild speichern...");
+        Save_Button.addActionListener(new ActionListener() { 
+            public void actionPerformed(ActionEvent e) { 
+                panel.ButtonHandler(e);
+            } 
+        });
+        leftPanel.add(Save_Button, gbc);
+
+        // Rechtes Panel
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout());
+        rightPanel.add(panel, BorderLayout.CENTER); // BufferedImage
+
+        // SplitPane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        Dimension bla = new Dimension(0,0);
+        splitPane.setMinimumSize(bla);
+        
+        
+        // Alles zum Frame hinzufügen
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(5, 5, 5, 5); // Abstand zwischen Komponenten
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weighty = 2;
+        frame.add(splitPane, gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weighty = 0;
         ProgressBar = new JProgressBar(SwingConstants.HORIZONTAL);
         frame.add(ProgressBar, gbc);
         ProgressBar.setValue(50);
-
-        gbc.gridx = 0; gbc.gridy = 9; gbc.gridwidth = 3;
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weighty = 0;
         Status_TextArea = new JTextArea("");
         Status_TextArea.setEditable(false);
-        frame.add(Status_TextArea , gbc);
-
+        frame.add(Status_TextArea, gbc);
+        
         frame.setVisible(true);
         panel.repaint();
+    }
+
+    public void saveImage(){
+        String FilePath = "";
+        File selectedFile;
+
+        chooser = new JFileChooser(); 
+        chooser.setCurrentDirectory(new java.io.File("."));
+        //chooser.setFileHidingEnabled(false);
+        FileNameExtensionFilter imageFilter = new FileNameExtensionFilter(
+            "Bilddateien (*.png, *.jpg)", "png", "jpg");
+        chooser.setFileFilter(imageFilter);
+        chooser.setAcceptAllFileFilterUsed(true);
+        
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) { 
+            selectedFile = chooser.getSelectedFile();
+            FilePath = selectedFile.getAbsolutePath();
+            System.out.println(FilePath);
+        }
+        else {
+            //System.out.println("No Selection ");
+            return;
+        }
+
+        if (selectedFile.exists()) { // überschreiben?
+            int overwrite = JOptionPane.showConfirmDialog(null, "Die Datei existiert bereits. Überschreiben?", "Datei überschreiben?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (overwrite != JOptionPane.YES_OPTION) {
+                System.out.println("Speichern abgebrochen.");
+                return;
+            }
+        }
+
+        try { // speichern
+            if (FilePath.endsWith(".jpg") || FilePath.endsWith(".JPG")){
+                File outputfile = new File(FilePath);
+                ImageIO.write(img, "jpg", outputfile);
+            }
+            else if (FilePath.endsWith(".png") || FilePath.endsWith(".PNG")){
+                File outputfile = new File(FilePath);
+                ImageIO.write(img, "png", outputfile);
+            }
+            else{ // nicht angeben, standard ist png
+                FilePath = FilePath + ".png";
+                File outputfile = new File(FilePath);
+                ImageIO.write(img, "png", outputfile);
+            }
+            Status_TextArea.setText("Gespeichert nach: " + FilePath);
+            
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return;
     }
     
     public void givePixelData(int[][] c, int xpix, int ypix) {
@@ -214,7 +291,6 @@ public class GUI extends JPanel{
             Status_TextArea.setText("Fertig!");
             Start_Button.setEnabled(true);
             Start_Button.setText("Start!");
-            
         }
 
         for (int y = 0; y < ypix; y++) {
@@ -226,6 +302,11 @@ public class GUI extends JPanel{
             }
         }
         repaint(); // forciert Neuzeichnung
+
+        if (this.save_img == true){
+            saveImage();
+            this.save_img = false;
+        }
     }
 
     @Override
