@@ -298,6 +298,12 @@ public class GUI extends JPanel{
     }
     
     public void givePixelData(int[][] c, int xpix, int ypix) {
+        // altes Bild speichern?
+        if (this.save_img == true){
+            saveImage();
+            this.save_img = false;
+        }
+
         // GUI updaten
         imagesDone++;
 
@@ -318,11 +324,6 @@ public class GUI extends JPanel{
                     img.setRGB(x, y, c[x][y]);
                     //System.out.println("Farbe: "+c[x][y]);
             }
-        }
-        
-        if (this.save_img == true){
-            saveImage();
-            this.save_img = false;
         }
         
         repaint(); // forciert Neuzeichnung
