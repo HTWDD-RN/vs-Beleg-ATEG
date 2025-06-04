@@ -1,6 +1,9 @@
 package vs_beleg_ateg.controller;
 import java.awt.Color;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.Naming;
 
 import vs_beleg_ateg.gui.GUI;
 import vs_beleg_ateg.worker.Task;
@@ -10,7 +13,7 @@ import vs_beleg_ateg.worker.WorkerInterface;
 import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 
 public class Controller {
-    int PORT = 1199;
+    int PORT = 1099;
     private int imageWidth, imageHeight;
     private double zoomPointX, zoomPointY;
     private double zoomFactor;
@@ -37,6 +40,18 @@ public class Controller {
         int thread_count = workerCount;
         Thread[] threads = new Thread[thread_count];
         TaskResult[] results = new TaskResult[thread_count];
+         
+        // Lookup Workers
+        WorkerInterface[] workers = new WorkerInterface[workerCount];
+        try {
+            Registry registry = LocateRegistry.getRegistry(PORT);
+            for (int i = 0; i < workerCount; i++) {
+                workers[i] = (WorkerInterface) Naming.lookup("rmi://localhost/Worker" + (i+1));
+            }
+        } catch (Exception e) {
+            System.err.println("RMI Lookup fehlgeschlagen: " + e);
+            return;
+        }
 
         int x_length = imageWidth/thread_count;
         Color[][] bild = new Color[imageWidth][imageHeight];
@@ -57,14 +72,12 @@ public class Controller {
                     imageHeight,
                     maxIterations
                 );
-
+                
                 threads[j] = new Thread(() -> {
                     try {
-                        WorkerInterface worker = new WorkerImpl();
-                        TaskResult result = worker.computeTask(task);
-                        results[threadIndex] = result;
+                        results[threadIndex] = workers[threadIndex].computeTask(task);
                     } catch (RemoteException e) {
-                        System.err.println("Fehler bei Worker " + threadIndex + ": " + e);
+                        System.err.println("RemoteException bei Worker " + threadIndex + ": " + e);
                     }
                 });
 
