@@ -8,17 +8,17 @@ import vs_beleg_ateg.worker.WorkerImpl;
 
 public class WorkerServer {
     public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Usage: java WorkerServer <master> <workerId> <port>");
+        if (args.length != 2) {
+            System.out.println("Usage: java WorkerServer <master> <workerId>");
             System.exit(1);
         }
         String master = args[0];
         String workerId = args[1];
-        int port = Integer.parseInt(args[2]);
+        int port = 1099;
         try {
             WorkerInterface worker = new WorkerImpl(); // 4 Threads im Pool
 
-             WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 0);
+            WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 0);
             
             Registry registry = LocateRegistry.getRegistry(master, port);
 
