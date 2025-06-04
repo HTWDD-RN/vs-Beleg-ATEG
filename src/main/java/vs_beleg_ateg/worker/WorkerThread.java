@@ -29,15 +29,14 @@ public class WorkerThread extends Thread {
                 double x = xStart + px * (xEnd - xStart) / (width - 1);
                 double y = yStart + py * (yEnd - yStart) / (height - 1);
 
-                int pixelValue = computeMandelbrot(x, y, iteration);
+                int pixelValue = computeMandelbrotPixel(x, y, iteration);
                 result.setPixel(pixelValue, px, py);
             }
         }
     }
 
-    public int computeMandelbrot(double x, double y, int Iteration) {
+    public int computeMandelbrotPixel(double x, double y, int Iteration) {
         
-        //MandelbrotCalculator MbEngine = new MandelbrotCalculator();
         int pix = MandelbrotCalculator.MandelbrotCalculator(x, y, Iteration);
         return pix;
     }
