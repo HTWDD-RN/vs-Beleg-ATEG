@@ -10,11 +10,13 @@ package vs_beleg_ateg.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.imageio.ImageIO;
 
 import vs_beleg_ateg.controller.Controller;
@@ -59,6 +61,8 @@ public class GUI extends JPanel{
     static JButton Save_Button;
 
     static JFileChooser chooser;
+
+    static JCheckBox ImgResize_CheckBox;
 
     static JProgressBar ProgressBar;
     static JTextArea Status_TextArea;
@@ -146,7 +150,6 @@ public class GUI extends JPanel{
         leftPanel.add(Zoompoint_Label, gbc);
         gbc.gridx = 1; gbc.gridy = 2;
         ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(-0.34837308755059104, -2.5, 1, 0.0001));
-        ZoompointX_Spinner.setSize(200, 20);
         JSpinner.NumberEditor editor = new JSpinner.NumberEditor(ZoompointX_Spinner, "0.##################");
         ZoompointX_Spinner.setEditor(editor);
         JFormattedTextField tf = editor.getTextField();
@@ -205,6 +208,11 @@ public class GUI extends JPanel{
             } 
         });
         leftPanel.add(Save_Button, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 9; gbc.gridwidth = 3;
+        ImgResize_CheckBox = new JCheckBox("Bild skalieren");
+        leftPanel.add(ImgResize_CheckBox, gbc);
+
 
         // Rechtes Panel
         JPanel rightPanel = new JPanel();
@@ -311,21 +319,58 @@ public class GUI extends JPanel{
                     //System.out.println("Farbe: "+c[x][y]);
             }
         }
-        repaint(); // forciert Neuzeichnung
-
+        
         if (this.save_img == true){
             saveImage();
             this.save_img = false;
         }
+        
+        repaint(); // forciert Neuzeichnung
+    }
+
+    public static boolean getImgResizeCheckboxState(){
+        return ImgResize_CheckBox.isSelected();
+    }
+
+    private static BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+        int origWidth = originalImage.getWidth();
+        int origHeight = originalImage.getHeight();
+
+        double scaleX = (double) targetWidth / origWidth;
+        double scaleY = (double) targetHeight / origHeight;
+
+        double scale = Math.min(scaleX, scaleY);
+
+        int newWidth = (int) (origWidth * scale);
+        int newHeight = (int) (origHeight * scale);
+
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        AffineTransform at = AffineTransform.getScaleInstance(scale, scale);
+        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+
+        return scaleOp.filter(originalImage, resizedImage);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-         if (img != null) { // zentriert zeichnen
-            int x = (getWidth() - img.getWidth()) / 2;
-            int y = (getHeight() - img.getHeight()) / 2;
-            g.drawImage(img, x, y, this);
+         if (img != null) { 
+            BufferedImage resizedImg = resizeImage(img, getWidth(), getHeight());
+            
+            if (getImgResizeCheckboxState() == true){
+                // zentriert zeichnen
+                int x = (getWidth() - resizedImg.getWidth()) / 2;
+                int y = (getHeight() - resizedImg.getHeight()) / 2;
+
+                g.drawImage(resizedImg, x, y, this);
+            }
+            else{
+                // zentriert zeichnen
+                int x = (getWidth() - img.getWidth()) / 2;
+                int y = (getHeight() - img.getHeight()) / 2;
+
+                g.drawImage(img, x, y, this);
+            }
         }
     }
 }
