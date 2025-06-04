@@ -24,7 +24,7 @@ public class GUI extends JPanel{
 
     static GUI panel;
     static JFrame frame;
-    static int frame_width = 1500;
+    static int frame_width = 1600;
     static int frame_height = 900;
 
     boolean save_img = false;
@@ -145,11 +145,21 @@ public class GUI extends JPanel{
         Zoompoint_Label = new JLabel("Zoompunkt (X/Y): ");
         leftPanel.add(Zoompoint_Label, gbc);
         gbc.gridx = 1; gbc.gridy = 2;
-        ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(-0.34837308755059104, -2.5, 1, 0.001));
+        ZoompointX_Spinner = new JSpinner(new SpinnerNumberModel(-0.34837308755059104, -2.5, 1, 0.0001));
+        ZoompointX_Spinner.setSize(200, 20);
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(ZoompointX_Spinner, "0.##################");
+        ZoompointX_Spinner.setEditor(editor);
+        JFormattedTextField tf = editor.getTextField();
+        tf.setColumns(9);
+
         leftPanel.add(ZoompointX_Spinner, gbc);
         gbc.gridx = 2; gbc.gridy = 2;
-        ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(-0.6065038451823017, -1.5, 1.5, 0.001));
+        ZoompointY_Spinner = new JSpinner(new SpinnerNumberModel(-0.6065038451823017, -1.5, 1.5, 0.0001));
         leftPanel.add(ZoompointY_Spinner, gbc);
+        JSpinner.NumberEditor editor2 = new JSpinner.NumberEditor(ZoompointY_Spinner, "0.##################");
+        ZoompointY_Spinner.setEditor(editor2);
+        JFormattedTextField tf2 = editor2.getTextField();
+        tf2.setColumns(9);
 
         gbc.gridx = 0; gbc.gridy = 3;
         Zoomfactor_Label = new JLabel("Zoomfaktor: ");
@@ -168,7 +178,7 @@ public class GUI extends JPanel{
         StepNumber_Label = new JLabel("Stufenanzahl: ");
         leftPanel.add(StepNumber_Label, gbc);
         gbc.gridx = 1; gbc.gridy = 5;
-        StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 1000, 1));
+        StepNumber_Spinner = new JSpinner(new SpinnerNumberModel(100, 1, 5000, 1));
         leftPanel.add(StepNumber_Spinner, gbc);
 
         gbc.gridx = 0; gbc.gridy = 6;
