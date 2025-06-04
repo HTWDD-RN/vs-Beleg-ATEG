@@ -30,6 +30,8 @@ public class GUI extends JPanel{
     static int frame_height = 900;
 
     boolean save_img = false;
+    long startTime = 0;
+    long endTime = 0;
     
     static Graphics2D g2d;
 
@@ -92,6 +94,9 @@ public class GUI extends JPanel{
 
             img = new BufferedImage(ResWidth, ResHeight, BufferedImage.TYPE_INT_RGB);
             controller = new Controller(ResWidth, ResHeight, ZoompointX, ZoompointY, Zoomfactor, StepNumber, MaxIterations, WorkerNumber, panel);
+
+            // Start!
+            startTime = System.currentTimeMillis();
             new Thread(() -> {
                 controller.startComputation();
             }).start();
@@ -312,7 +317,11 @@ public class GUI extends JPanel{
         ProgressBar.setValue((int)progressPercent);
         
         if (imagesDone == imageCount){ // fertig
-            Status_TextArea.setText("Fertig!");
+            // Ende!
+            endTime = System.currentTimeMillis();
+            long totalTime = endTime - startTime;
+
+            Status_TextArea.setText("Fertig! (Dauer: " + totalTime + " ms)");
             Start_Button.setEnabled(true);
             Start_Button.setText("Start!");
         }
