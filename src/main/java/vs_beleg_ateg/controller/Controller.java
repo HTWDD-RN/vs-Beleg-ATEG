@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.rmi.Naming;
 
 import vs_beleg_ateg.gui.GUI;
@@ -37,17 +38,38 @@ public class Controller {
         // bild in 4 vertikale Streifen teilen
         int thread_count = workerCount;
         Thread[] threads = new Thread[thread_count];
-        TaskResult[] results = new TaskResult[thread_count];
          
         // Lookup Workers
         WorkerInterface[] workers = new WorkerInterface[workerCount];
         try {
-            Registry registry = LocateRegistry.getRegistry(PORT);
+            try {
+                // Versuche, Registry auf dem Standardport (1099) zu finden
+                Registry registry = LocateRegistry.getRegistry(1099);
+    
+                registry.list();
+                System.out.println("Registry läuft bereits.");
+    
+            } catch (RemoteException e) {
+                System.out.println("Registry läuft nicht. Starte neue Registry...");
+    
+                try {
+                    // Erstelle neue Registry
+                    Registry newRegistry = LocateRegistry.createRegistry(1099);
+                    System.out.println("Neue Registry gestartet.");
+                } catch (RemoteException ex) {
+                    System.err.println("Fehler beim Starten der Registry: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+
+            //Registry registry = LocateRegistry.getRegistry(PORT);
+
+            //Naming.rebind("Master", );
             for (int i = 0; i < workerCount; i++) {
                 boolean connected = false;
                 while (!connected) {
                     try {
-                        workers[i] = (WorkerInterface) registry.lookup( "Worker" + (i + 1));
+                        workers[i] = (WorkerInterface) Naming.lookup( "rmi://localhost/Worker" + (i + 1));
                         System.out.println("Worker " + (i + 1) + " verbunden.");
                         connected = true;
                     } catch (Exception e) {
@@ -67,6 +89,8 @@ public class Controller {
 
         int x_length = imageWidth/thread_count;
         Color[][] bild = new Color[imageWidth][imageHeight];
+        int results[][][];
+        results = new int[workerCount][][];
         int i;
         for (i = 1; i <= stepCount; i++) { // Round loop
             for (int j = 0; j < thread_count; j++) {
@@ -85,9 +109,11 @@ public class Controller {
                     maxIterations
                 );
 
+                results[j] = new int[imageWidth][imageHeight];
+
                 threads[j] = new Thread(() -> {
                     try {
-                        results[threadIndex] = workers[threadIndex].computeTask(task);
+                        results[threadIndex] = workers[threadIndex].computeTask(xStart,ymin,xEnd,ymax,x_stopPixel - x_startPixel,imageHeight,maxIterations);
                     } catch (RemoteException e) {
                         System.err.println("RemoteException bei Worker " + threadIndex + ": " + e);
                     }
@@ -115,7 +141,7 @@ public class Controller {
 
             int[][] fullImage = new int[imageWidth][imageHeight];
             for (int j = 0; j < thread_count; j++) {
-                int[][] part = results[j].getPixelData();
+                int[][] part = results[j];
                 int xOffset = j * x_length;
 
                 for (int x = 0; x < part.length; x++) {

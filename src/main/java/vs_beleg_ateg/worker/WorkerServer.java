@@ -18,7 +18,7 @@ public class WorkerServer {
         try {
             WorkerInterface stub = new WorkerImpl();
             
-            Registry registry = LocateRegistry.getRegistry(master, port);
+            Registry registry = LocateRegistry.getRegistry(port);
 
             registry.rebind("Worker" + workerId, stub);
             //registry.rebind("Worker_" + System.currentTimeMillis(), worker);

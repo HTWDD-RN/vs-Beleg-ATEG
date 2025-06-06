@@ -5,5 +5,5 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface WorkerInterface extends Remote {
-    TaskResult computeTask(Task task) throws RemoteException;
+    int[][] computeTask(double startX,double startY,double endX,double endY, int width,int height,int iteration) throws RemoteException;
 }

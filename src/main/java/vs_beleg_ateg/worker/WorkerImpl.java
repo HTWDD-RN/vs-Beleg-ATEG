@@ -15,7 +15,8 @@ public class WorkerImpl extends UnicastRemoteObject
         super();
     }
     
-    public TaskResult computeTask(Task task) throws RemoteException{
+    public int[][] computeTask(double startX,double startY,double endX,double endY, int width,int height,int iteration) throws RemoteException{
+        Task task = new Task(startX, startY, endX, endY, width, height, iteration);
         WorkerThread worker = new WorkerThread(task);
         worker.start();
 
@@ -26,7 +27,7 @@ public class WorkerImpl extends UnicastRemoteObject
             throw new RemoteException("Thread interrupted", e);
         }
 
-        return worker.getResult();
+        return worker.getResult().getPixelData();
     }
 
     public void setTask(Task task) {
