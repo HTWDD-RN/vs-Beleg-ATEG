@@ -14,9 +14,7 @@ echo "Kompiliere alle relevanten Klassen..."
 mkdir -p target/test-classes
 
 # Kompiliere alle .java-Dateien
-find src -name "*.java" > sources.txt
-javac -d target/test-classes -cp target @sources.txt
-rm sources.txt
+javac -d target/test-classes -cp target $(find src -name "*.java")
 
 # Worker starten mit übergebenem Master-Host und Worker-ID
 echo "Starte Worker mit Master '$MASTER_HOST' und ID '$WORKER_ID'..."
