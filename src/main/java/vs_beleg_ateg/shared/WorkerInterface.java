@@ -1,4 +1,4 @@
-package vs_beleg_ateg.worker;
+package vs_beleg_ateg.shared;
 
 
 import java.rmi.Remote;

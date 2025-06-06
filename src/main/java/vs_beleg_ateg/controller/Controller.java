@@ -9,7 +9,7 @@ import java.rmi.Naming;
 import vs_beleg_ateg.gui.GUI;
 import vs_beleg_ateg.worker.Task;
 import vs_beleg_ateg.worker.TaskResult;
-import vs_beleg_ateg.worker.WorkerInterface;
+import vs_beleg_ateg.shared.WorkerInterface;
 
 public class Controller {
     int PORT = 1099;

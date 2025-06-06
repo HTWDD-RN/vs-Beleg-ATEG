@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ne 2 ]; then
-    echo "❗ Nutzung: ./run_worker.sh <master-host> <worker-id>"
+    echo "Nutzung: ./run_worker.sh <master-host> <worker-id>"
     exit 1
 fi
 
