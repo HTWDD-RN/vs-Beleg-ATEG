@@ -20,6 +20,7 @@ public class Controller {
     private int maxIterations;
     private int workerCount;
     private GUI gui;
+    private final WorkerInterface client;
     double xmin = -1.666, xmax = 1, ymin = -1, ymax = 1;
 
     public Controller(int imageWidth, int imageHeight, double zoomPointX, double zoomPointY, double zoomFactor, int stepCount, int maxIterations, int workerCount, GUI gui) {
@@ -86,6 +87,8 @@ public class Controller {
             System.err.println("RMI Lookup fehlgeschlagen: " + e);
             return;
         }
+
+        this.client = (WorkerInterface) Naming.lookup("rmi://localhost:1099/Master");
 
         int x_length = imageWidth/thread_count;
         Color[][] bild = new Color[imageWidth][imageHeight];
