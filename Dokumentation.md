@@ -1,11 +1,27 @@
-# Rollenaufteilung(miteels ChatGPT, also diskutierbar):
+# Dokumentation – Mandelbrot-Projekt
 
-### 👥 **Teammitglieder und ihre Aufgaben**
+## Projektziel 
 
-#### **Person 1: Controller & Task-Verwaltung**
+Implementierung eines verteilten Programms zur parallelen Berechnung und Darstellung der Mandelbrotmenge
+
+## Technische Architektur
+- **Module**: Controller, Worker, MandelbrotEngine, Renderer
+- **Kommunikation**: RMI-Aufrufe zwischen Controller ↔ Worker
+- **Ablauf**: Tasks → Verteilung → Berechnung → Ergebnis → Anzeige
+
+## Verteilungsgewinn & Zeitmessung
+| Threads | Zeit (ms)|
+|---------|----------|
+| 1       | ...      |
+| 2       | ...      |
+| 3       | ...      |
+| 4       | ...      |
+
+# Rollenaufteilung:
+
+### **Ahmad: Controller & Task-Verwaltung**
 
 **Verantwortlichkeiten:**
->Übernimmt Ahmad
 
 * **Koordination der Berechnung:** Der Controller steuert den gesamten Ablauf, teilt Aufgaben zu und sammelt die Ergebnisse.
 * **Aufgabenverteilung:** Unterteilt das Bild in "Tiles" oder Zeilen und teilt diese als Tasks an die Worker zu.
@@ -20,34 +36,37 @@
 
 **Zusammenarbeit mit anderen Teammitgliedern:**
 
-* Arbeitet mit **Person 2** zusammen, um die Berechnungslogik klar zu definieren.
-* Kommuniziert mit **Person 3** für die Verwaltung des Thread-Pools.
+* Nutzt die von **Tobias** bereitgestellte Berechnungslogik zur Lösung der Tasks.
+* Übergibt Aufgaben über RMI an entfernte Worker, die von **Georg** implementiert wurden.
+* Koordiniert die Taskverteilung, sammelt die TaskResult-Objekte und übergibt das fertige Bild an die GUI von **Eric**
 
 ---
 
-#### **Person 2: Mandelbrot-Engine (Berechnungskern)**
->Übernimmt Tobias
+#### **Tobias: Mandelbrot-Engine (Berechnungskern)**
 
 **Verantwortlichkeiten:**
 
-* **Mandelbrot-Berechnung:** Implementiert die eigentliche mathematische Berechnung der Mandelbrot-Menge pro Pixel.
-* **Optimierungen:** Implementiert verschiedene Berechnungsalgorithmen wie Escape-Time und Smooth Coloring zur Optimierung der Performance.
-* **Tile-Verarbeitung:** Berechnet die Mandelbrot-Werte für die durch den Controller zugewiesenen Tiles oder Zeilen.
+* **Mathematische Berechnung:** Implementiert die Escape-Time-Logik zur Berechnung der Mandelbrotmenge für einen gegebenen Punkt in der komplexen Ebene.
+* **Umwandlung:** Wandelt Pixelkoordinaten (x, y) in komplexe Zahlen (re, im) um.
+* **Farbgebung:** Berechnet einen Farbwert (RGB) auf Basis der Iterationsanzahl für die spätere Darstellung.
+* **Optimierungspotenzial:** Die aktuelle Implementation nutzt klassische Escape-Time. Erweiterbar um z. B. Smooth Coloring.
 
 **Methoden:**
 
-* `computePixel(x, y)`: Berechnet den Wert für einen einzelnen Pixel.
-* `computeTile(tile)`: Berechnet alle Pixel in einem gegebenen Tile (Block von Pixeln).
+* `computePixel(re, im, maxIter):int`: Berechnet den Farbwert eines einzelnen Punkts der Mandelbrot-Menge.
+Gibt einen RGB-Wert (int) zurück, abhängig davon, wie schnell die Folge divergiert.
+* `computeTile(tile)`: Ist konzeptionell vorgesehen, aber nicht als eigene Methode implementiert.
+Die Berechnung eines Tiles erfolgt im Worker durch wiederholten Aufruf von `computePixel(...)`.
 
 **Zusammenarbeit mit anderen Teammitgliedern:**
 
-* Arbeitet eng mit **Person 1** zusammen, um die Berechnungslogik pro Task zu definieren.
-* Koordiniert mit **Person 3** bei der Aufgabenverteilung und parallelen Berechnung.
+* Arbeitet eng mit **Georg** zusammen, da die Workers für jeden Punkt computePixel(...) aufrufen.
+* Die Methode liefert das Ergebnis zurück, das später von **Ahmad** koordiniert und von **Eric** angezeigt wird.
 
 ---
 
-#### **Person 3: Worker-System & Thread-Pool**
->Übernimmt Georg
+#### **Georg: Worker-System & Thread-Pool**
+
 
 **Verantwortlichkeiten:**
 
@@ -65,13 +84,13 @@
 
 **Zusammenarbeit mit anderen Teammitgliedern:**
 
-* Kommuniziert mit **Person 1**, um Aufgaben zu erhalten.
-* Arbeitet mit **Person 2** zusammen, um sicherzustellen, dass die Berechnungslogik korrekt ausgeführt wird.
+* Kommuniziert mit **Ahmad**, um Aufgaben zu erhalten.
+* Arbeitet mit **Tobias** zusammen, um sicherzustellen, dass die Berechnungslogik korrekt ausgeführt wird.
 
 ---
 
-#### **Person 4: Renderer & Bildausgabe **
->Übernimmt Eric 
+#### **Eric: Renderer & Bildausgabe**
+ 
 
 **Verantwortlichkeiten:**
 
@@ -87,17 +106,17 @@
 
 **Zusammenarbeit mit anderen Teammitgliedern:**
 
-* Arbeitet mit **Person 1** zusammen, um die finalen Ergebnisse nach Abschluss der Berechnung anzuzeigen.
-* Koordiniert mit **Person 2**, um sicherzustellen, dass die richtigen Farbwerte für die Visualisierung verwendet werden.
+* Arbeitet mit **Ahmad** zusammen, um die finalen Ergebnisse nach Abschluss der Berechnung anzuzeigen.
+* Koordiniert mit **Tobias**, um sicherzustellen, dass die vom Berechnungsmodul gelieferten RGB-Werte korrekt dargestellt werden.
 
 ---
 
 ### 🔄 **Zusammenarbeit und Kommunikationsflüsse**
 
-1. **Controller** (Person 1) teilt das Bild in **Tasks** auf (Zeilen oder Tiles).
-2. **Mandelbrot-Engine** (Person 2) berechnet die Werte für jedes Pixel innerhalb eines Tiles.
-3. **Thread-Pool und Worker** (Person 3) führen die Berechnungen parallel aus, indem sie Tasks vom Controller erhalten und die Mandelbrot-Werte berechnen.
-4. Sobald alle Berechnungen abgeschlossen sind, sendet der **Controller** die Ergebnisse an den **Renderer** (Person 4), um das Bild zu visualisieren und zu speichern.
-5. **Renderer** (Person 4) zeichnet das Bild und zeigt den Fortschritt an (optional in einem GUI).
+1. **Controller** (Ahmad) teilt das Bild in **Tasks** auf (Zeilen oder Tiles).
+2. **Mandelbrot-Engine** (Tobias) berechnet die Werte für jedes Pixel innerhalb eines Tiles.
+3. **Thread-Pool und Worker** (Georg) führen die Berechnungen parallel aus, indem sie Tasks vom Controller erhalten und die Mandelbrot-Werte berechnen.
+4. Sobald alle Berechnungen abgeschlossen sind, sendet der **Controller** die Ergebnisse an den **Renderer** (Eric), um das Bild zu visualisieren und zu speichern.
+5. **Renderer** (Eric) zeichnet das Bild und zeigt den Fortschritt an (optional in einem GUI).
 
 
