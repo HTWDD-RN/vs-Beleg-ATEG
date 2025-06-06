@@ -5,6 +5,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import vs_beleg_ateg.worker.WorkerImpl;
+import vs_beleg_ateg.shared.WorkerInterface;
 
 public class WorkerServer {
     public static void main(String[] args) {
@@ -12,19 +13,25 @@ public class WorkerServer {
             System.out.println("Usage: java WorkerServer <master> <workerId>");
             System.exit(1);
         }
-        String master = args[0];
+        String master = "localhost";        //args[0];
         String workerId = args[1];
         int port = 1099;
         try {
-            WorkerInterface stub = new WorkerImpl();
-            
-            Registry registry = LocateRegistry.getRegistry(port);
+            WorkerImpl worker = new WorkerImpl();
 
-            registry.rebind("Worker" + workerId, stub);
-            //registry.rebind("Worker_" + System.currentTimeMillis(), worker);
+            //System.out.println("Vor Create stub");
+            //WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 0);
+            
+            System.out.println("Vor getRegistry");
+            Registry registry = LocateRegistry.getRegistry(master);
+            
+            System.out.println("Vor Rebind");
+            Naming.rebind("rmi://"+master+"/worker" + workerId, worker);
+            
             System.out.println("Worker ready.");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
+            //e.print(e);
         }
     }
 }
