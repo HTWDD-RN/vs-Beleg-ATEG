@@ -3,29 +3,25 @@ skinparam style strictuml
 skinparam classAttributeIconSize 0
 
 ' Interfaces
-interface guiInterface
+
 interface WorkerInterface <<Remote>>
 
 ' Klassen
 class GUI
 class Controller
 class MandelbrotCalculator
-class Task
-class TaskResult
 class WorkerImpl
-class WorkerThread
 class WorkerServer
 
 ' Beziehungen
-GUI ..|> guiInterface
+
 GUI --> Controller : uses
-Controller --> MandelbrotCalculator : uses
-Controller --> Task : creates
-Controller --> WorkerInterface : calls
-WorkerImpl ..|> WorkerInterface
-WorkerImpl --> Task : uses
-WorkerImpl --> TaskResult : returns
-WorkerThread --> Task : processes
+Controller ..|> WorkerInterface : uses
+Controller ..|> WorkerImpl : calls per RMI
+WorkerImpl --> WorkerInterface : impelements
+WorkerImpl --> MandelbrotCalculator : uses
+
+
 WorkerServer --> WorkerImpl : starts
 
 @enduml
