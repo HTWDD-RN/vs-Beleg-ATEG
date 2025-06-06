@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 import vs_beleg_ateg.worker.Task;
 
-public class WorkerImpl extends UnicastRemoteObject
+public class WorkerImpl //extends UnicastRemoteObject
     implements WorkerInterface {
     Task task;
 

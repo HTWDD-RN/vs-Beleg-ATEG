@@ -16,9 +16,10 @@ public class WorkerServer {
         String workerId = args[1];
         int port = 1099;
         try {
-            WorkerInterface stub = new WorkerImpl();
+            WorkerImpl worker = new WorkerImpl();
+            WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 1099);
             
-            Registry registry = LocateRegistry.getRegistry(port);
+            Registry registry = LocateRegistry.getRegistry("localhost");
 
             registry.rebind("Worker" + workerId, stub);
             //registry.rebind("Worker_" + System.currentTimeMillis(), worker);

@@ -20,7 +20,6 @@ public class Controller {
     private int maxIterations;
     private int workerCount;
     private GUI gui;
-    private final WorkerInterface client;
     double xmin = -1.666, xmax = 1, ymin = -1, ymax = 1;
 
     public Controller(int imageWidth, int imageHeight, double zoomPointX, double zoomPointY, double zoomFactor, int stepCount, int maxIterations, int workerCount, GUI gui) {
@@ -42,10 +41,12 @@ public class Controller {
          
         // Lookup Workers
         WorkerInterface[] workers = new WorkerInterface[workerCount];
+        
         try {
+            Registry registry = null;
             try {
                 // Versuche, Registry auf dem Standardport (1099) zu finden
-                Registry registry = LocateRegistry.getRegistry(1099);
+                registry = LocateRegistry.getRegistry(1099);
     
                 registry.list();
                 System.out.println("Registry läuft bereits.");
@@ -57,6 +58,7 @@ public class Controller {
                     // Erstelle neue Registry
                     Registry newRegistry = LocateRegistry.createRegistry(1099);
                     System.out.println("Neue Registry gestartet.");
+                    registry = newRegistry;
                 } catch (RemoteException ex) {
                     System.err.println("Fehler beim Starten der Registry: " + ex.getMessage());
                     ex.printStackTrace();
@@ -70,7 +72,7 @@ public class Controller {
                 boolean connected = false;
                 while (!connected) {
                     try {
-                        workers[i] = (WorkerInterface) Naming.lookup( "rmi://localhost/Worker" + (i + 1));
+                        workers[i] = (WorkerInterface) registry.lookup( "Worker" + (i + 1));
                         System.out.println("Worker " + (i + 1) + " verbunden.");
                         connected = true;
                     } catch (Exception e) {
@@ -88,7 +90,7 @@ public class Controller {
             return;
         }
 
-        this.client = (WorkerInterface) Naming.lookup("rmi://localhost:1099/Master");
+        //WorkerInterface worker = (WorkerInterface) Naming.lookup("rmi://localhost:1099/Master");
 
         int x_length = imageWidth/thread_count;
         Color[][] bild = new Color[imageWidth][imageHeight];
