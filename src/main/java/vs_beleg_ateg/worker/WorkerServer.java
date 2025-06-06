@@ -17,6 +17,8 @@ public class WorkerServer {
         int port = 1099;
         try {
             WorkerImpl worker = new WorkerImpl();
+
+            System.out.println("Vor Create stub");
             WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 1099);
             
             Registry registry = LocateRegistry.getRegistry("localhost");
@@ -25,7 +27,7 @@ public class WorkerServer {
             //registry.rebind("Worker_" + System.currentTimeMillis(), worker);
             System.out.println("Worker ready.");
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }
