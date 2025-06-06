@@ -101,3 +101,9 @@
 5. **Renderer** (Person 4) zeichnet das Bild und zeigt den Fortschritt an (optional in einem GUI).
 
 
+# Geschwindigkeit
+
+- 1 Rechner mit i5-13500@4GHz
+1 Worker: 128536 ms
+4 Worker: 38613 ms
+20 Worker: 12159 ms 
