@@ -1,6 +1,8 @@
 package vs_beleg_ateg.worker;
 
-public class TaskResult {
+import java.io.Serializable;
+
+public class TaskResult implements Serializable {
     private int[][] pixelData;
     private int width, height;
 
