@@ -7,7 +7,7 @@ PID=$(lsof -ti tcp:$REGISTRY_PORT)
 
 if [ -z "$PID" ]; then
   echo "Starte RMI-Registry auf Port $REGISTRY_PORT..."
-  rmiregistry $REGISTRY_PORT &
+  rmiregistry -Djava.rmi.server.codebase=file:/$(pwd)/target/test-classes/ $REGISTRY_PORT &
   sleep 2
 else
   echo "RMI-Registry läuft bereits mit PID $PID auf Port $REGISTRY_PORT."
@@ -16,13 +16,13 @@ fi
 echo "Kompiliere Java-Klassen..."
 
 # Erstelle das Zielverzeichnis, falls es nicht existiert
-mkdir -p target/test_classes
+mkdir -p target/test-classes
 
 # Kompiliere alle .java-Dateien aus src/ ins target-Verzeichnis
 find src -name "*.java" > sources.txt
-javac -d target/test_classes @sources.txt
+javac -d target/test-classes @sources.txt
 rm sources.txt
 
 
 echo "Starte GUI..."
-java -cp target/test_classes vs_beleg_ateg.gui.GUI
+java -cp target/test-classes vs_beleg_ateg.gui.GUI
