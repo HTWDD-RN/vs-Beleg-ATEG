@@ -1,0 +1,31 @@
+@startuml
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+
+' Interfaces
+interface guiInterface
+interface WorkerInterface <<Remote>>
+
+' Klassen
+class GUI
+class Controller
+class MandelbrotCalculator
+class Task
+class TaskResult
+class WorkerImpl
+class WorkerThread
+class WorkerServer
+
+' Beziehungen
+GUI ..|> guiInterface
+GUI --> Controller : uses
+Controller --> MandelbrotCalculator : uses
+Controller --> Task : creates
+Controller --> WorkerInterface : calls
+WorkerImpl ..|> WorkerInterface
+WorkerImpl --> Task : uses
+WorkerImpl --> TaskResult : returns
+WorkerThread --> Task : processes
+WorkerServer --> WorkerImpl : starts
+
+@enduml
