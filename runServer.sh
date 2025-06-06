@@ -2,17 +2,6 @@
 
 REGISTRY_PORT=1099
 
-# Prüfen, ob Registry bereits läuft
-PID=$(lsof -ti tcp:$REGISTRY_PORT)
-
-if [ -z "$PID" ]; then
-  echo "Starte RMI-Registry auf Port $REGISTRY_PORT..."
-  rmiregistry -J-Djava.rmi.server.codebase=file:/$(pwd)/target/test-classes/ &
-  sleep 2
-else
-  echo "RMI-Registry läuft bereits mit PID $PID auf Port $REGISTRY_PORT."
-fi
-
 echo "Kompiliere Java-Klassen..."
 
 # Erstelle das Zielverzeichnis, falls es nicht existiert

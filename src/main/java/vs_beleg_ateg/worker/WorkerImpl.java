@@ -3,19 +3,21 @@ package vs_beleg_ateg.worker;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 
+import vs_beleg_ateg.shared.WorkerInterface;
 import vs_beleg_ateg.mandelbrotengine.MandelbrotCalculator;
 import vs_beleg_ateg.worker.Task;
 
 public class WorkerImpl extends UnicastRemoteObject
     implements WorkerInterface {
-    Task task;
+    //Task task;
 
     public WorkerImpl() throws RemoteException{
         //this.task = newTask;
         super();
     }
     
-    public TaskResult computeTask(Task task) throws RemoteException{
+    public int[][] computeTask(double startX,double startY,double endX,double endY, int width,int height,int iteration) throws RemoteException{
+        Task task = new Task(startX, startY, endX, endY, width, height, iteration);
         WorkerThread worker = new WorkerThread(task);
         worker.start();
 
@@ -26,10 +28,6 @@ public class WorkerImpl extends UnicastRemoteObject
             throw new RemoteException("Thread interrupted", e);
         }
 
-        return worker.getResult();
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
+        return worker.getResult().getPixelData();
     }
 }

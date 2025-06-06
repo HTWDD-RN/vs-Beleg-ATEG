@@ -1,0 +1,27 @@
+@startuml
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+
+' Interfaces
+
+interface WorkerInterface <<Remote>>
+
+' Klassen
+class GUI
+class Controller
+class MandelbrotCalculator
+class WorkerImpl
+class WorkerServer
+
+' Beziehungen
+
+GUI --> Controller : uses
+Controller ..|> WorkerInterface : uses
+Controller ..|> WorkerImpl : calls per RMI
+WorkerImpl --> WorkerInterface : impelements
+WorkerImpl --> MandelbrotCalculator : uses
+
+
+WorkerServer --> WorkerImpl : starts
+
+@enduml
