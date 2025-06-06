@@ -19,15 +19,18 @@ public class WorkerServer {
             WorkerImpl worker = new WorkerImpl();
 
             System.out.println("Vor Create stub");
-            WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 1099);
+            WorkerInterface stub = (WorkerInterface) UnicastRemoteObject.exportObject(worker, 0);
             
+            System.out.println("Vor getRegistry");
             Registry registry = LocateRegistry.getRegistry("localhost");
-
+            
+            System.out.println("Vor Rebind");
             registry.rebind("Worker" + workerId, stub);
             //registry.rebind("Worker_" + System.currentTimeMillis(), worker);
             System.out.println("Worker ready.");
         } catch (Exception e) {
-            //e.printStackTrace();
+            System.out.println(e);
+            //e.print(e);
         }
     }
 }
