@@ -7,7 +7,7 @@ PID=$(lsof -ti tcp:$REGISTRY_PORT)
 
 if [ -z "$PID" ]; then
   echo "Starte RMI-Registry auf Port $REGISTRY_PORT..."
-  rmiregistry -Djava.rmi.server.codebase=file:/$(pwd)/target/test-classes/ $REGISTRY_PORT &
+  rmiregistry -J-Djava.rmi.server.codebase=file:/$(pwd)/target/test-classes/ &
   sleep 2
 else
   echo "RMI-Registry läuft bereits mit PID $PID auf Port $REGISTRY_PORT."

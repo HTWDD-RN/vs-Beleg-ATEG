@@ -1,6 +1,8 @@
 package vs_beleg_ateg.worker;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable{
     private double startX; //Startkoordinate x
     private double startY; //Startkoordinate x
     private double endX; //Endkoordinate x
