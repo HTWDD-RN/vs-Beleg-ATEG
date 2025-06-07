@@ -14,11 +14,13 @@ Ahmad: Implementierung des Controllers und Erstellung des BootstrapServers mit G
 Georg: Implementierung der Worker, Planung der Projektarbeit
 Tobias: Implementierung der PixelBerechnung
 
+Genauere Beschreibung in Dokumentation.md
+
 
 # Geschwindigkeit
 
 - alle Tests unter Windows 10, Linux ist tatsächlich langsamer
-- 1 Rechner mit i5-13500@4GHz ohne RMI
+- 1 Rechner mit i5-13500@4GHz ohne RMI (nur mit Thread-Verteilung)
   - 1 Threads: 128536 ms
   - 4 Threads: 38613 ms
   - 20 Threads: 12159 ms
