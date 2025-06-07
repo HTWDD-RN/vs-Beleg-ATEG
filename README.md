@@ -12,10 +12,10 @@ Start für Funktionsfähige Berechnung:
 Das Klassenmodel ist in UML_Klassendiagramm.puml gespeichert.
 
 Wir haben die Implementierung und Aufgaben wie folgt aufgeilt:
-Eric: Implementierung der GUI
-Ahmad: Implementierung des Controllers und Erstellung des BootstrapServers mit Georg
-Georg: Implementierung der Worker, Planung der Projektarbeit
-Tobias: Implementierung der PixelBerechnung
+- Eric: Implementierung der GUI
+- Ahmad: Implementierung des Controllers und Erstellung des BootstrapServers mit Georg
+- Georg: Implementierung der Worker, Planung der Projektarbeit
+- Tobias: Implementierung der PixelBerechnung
 
 Genauere Beschreibung in Dokumentation.md
 
