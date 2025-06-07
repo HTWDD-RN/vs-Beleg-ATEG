@@ -3,13 +3,15 @@ import java.awt.Color;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
+import java.util.*;
 import java.rmi.Naming;
+import java.rmi.Remote;
 
+import vs_beleg_ateg.bootstrap.Bootstrap;
 import vs_beleg_ateg.gui.GUI;
 import vs_beleg_ateg.worker.Task;
 import vs_beleg_ateg.worker.TaskResult;
-import vs_beleg_ateg.shared.WorkerInterface;
+import vs_beleg_ateg.worker.WorkerInterface;
 
 public class Controller {
     int PORT = 1099;
@@ -20,7 +22,9 @@ public class Controller {
     private int maxIterations;
     private int workerCount;
     private GUI gui;
+    private Bootstrap bootstrap;
     double xmin = -1.666, xmax = 1, ymin = -1, ymax = 1;
+    List<Remote> workerList;
 
     public Controller(int imageWidth, int imageHeight, double zoomPointX, double zoomPointY, double zoomFactor, int stepCount, int maxIterations, int workerCount, GUI gui) {
         this.imageWidth = imageWidth;
@@ -32,70 +36,43 @@ public class Controller {
         this.workerCount =  workerCount;
         this.maxIterations = maxIterations;
         this.gui = gui;
+
+        String addr = "localhost";
+        int port = 1099;
+        try {
+            bootstrap = (Bootstrap) LocateRegistry.getRegistry(addr, port).lookup("Bootstrap");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void startComputation(){
         // bild in 4 vertikale Streifen teilen
         int thread_count = workerCount;
         Thread[] threads = new Thread[thread_count];
-         
-        // Lookup Workers
-        WorkerInterface[] workers = new WorkerInterface[workerCount];
+        TaskResult[] results = new TaskResult[thread_count];
         
-        try {
-            Registry registry = null;
+        //Warten, dass alle Worker registriert sind
+        do{
             try {
-                // Versuche, Registry auf dem Standardport (1099) zu finden
-                registry = LocateRegistry.getRegistry(1099);
-    
-                registry.list();
-                System.out.println("Registry läuft bereits.");
-    
-            } catch (RemoteException e) {
-                System.out.println("Registry läuft nicht. Starte neue Registry...");
-    
-                try {
-                    // Erstelle neue Registry
-                    Registry newRegistry = LocateRegistry.createRegistry(1099);
-                    System.out.println("Neue Registry gestartet.");
-                    registry = newRegistry;
-                } catch (RemoteException ex) {
-                    System.err.println("Fehler beim Starten der Registry: " + ex.getMessage());
-                    ex.printStackTrace();
-                }
+                workerList = bootstrap.getWorkerList();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            //Registry registry = LocateRegistry.getRegistry(PORT);
-
-            //Naming.rebind("Master", );
-            for (int i = 0; i < workerCount; i++) {
-                boolean connected = false;
-                while (!connected) {
-                    try {
-                        workers[i] = (WorkerInterface) registry.lookup( "Worker" + (i + 1));
-                        System.out.println("Worker " + (i + 1) + " verbunden.");
-                        connected = true;
-                    } catch (Exception e) {
-                        System.out.println("Warte auf Worker " + (i + 1) + "...");
-                        try {
-                            Thread.sleep(1000); // 1 Sekunde warten
-                        } catch (InterruptedException ie) {
-                            ie.printStackTrace();
-                        }
-                    }
-                }
+            if(workerList.size() < workerCount){
+                System.err.println("Zu wenig Worker wurden registriert("+workerList.size()+"/"+workerCount+"), Warte auf mehr Worker");
             }
-        } catch (Exception e) {
-            System.err.println("RMI Lookup fehlgeschlagen: " + e);
-            return;
-        }
 
-        //WorkerInterface worker = (WorkerInterface) Naming.lookup("rmi://localhost:1099/Master");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }while(workerList.size() < workerCount);
 
         int x_length = imageWidth/thread_count;
         Color[][] bild = new Color[imageWidth][imageHeight];
-        int results[][][];
-        results = new int[workerCount][][];
         int i;
         for (i = 1; i <= stepCount; i++) { // Round loop
             for (int j = 0; j < thread_count; j++) {
@@ -114,11 +91,10 @@ public class Controller {
                     maxIterations
                 );
 
-                results[j] = new int[imageWidth][imageHeight];
-
                 threads[j] = new Thread(() -> {
                     try {
-                        results[threadIndex] = workers[threadIndex].computeTask(xStart,ymin,xEnd,ymax,x_stopPixel - x_startPixel,imageHeight,maxIterations);
+                        WorkerInterface worker = (WorkerInterface) workerList.get(threadIndex);
+                        results[threadIndex] = worker.computeTask(task);
                     } catch (RemoteException e) {
                         System.err.println("RemoteException bei Worker " + threadIndex + ": " + e);
                     }
@@ -146,7 +122,7 @@ public class Controller {
 
             int[][] fullImage = new int[imageWidth][imageHeight];
             for (int j = 0; j < thread_count; j++) {
-                int[][] part = results[j];
+                int[][] part = results[j].getPixelData();
                 int xOffset = j * x_length;
 
                 for (int x = 0; x < part.length; x++) {
@@ -156,12 +132,6 @@ public class Controller {
                 }
             }
             gui.givePixelData(fullImage, imageWidth, imageHeight);
-
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

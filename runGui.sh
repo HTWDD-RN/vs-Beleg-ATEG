@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Kompiliere Java-Klassen..."
+
 # Erstelle das Zielverzeichnis, falls es nicht existiert
 mkdir -p target/test-classes
 
@@ -7,4 +9,4 @@ mkdir -p target/test-classes
 javac -d target/test-classes -cp target $(find src -name "*.java")
 
 echo "Starte GUI..."
-java -cp target/test-classes vs_beleg_ateg.bootstrap.BootstrapRegistration
+java -cp target/test-classes vs_beleg_ateg.gui.GUI
