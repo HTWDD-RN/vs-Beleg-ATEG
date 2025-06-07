@@ -22,6 +22,9 @@ Genauere Beschreibung in Dokumentation.md
 # Messwerte
 
 - alle Tests unter Windows 10, Linux ist tatsächlich langsamer
+
+![Plot](plot/speed.png)
+
 ## 1 Rechner mit i5-13500@4GHz **ohne RMI** (nur mit Thread-Verteilung)
 
 | Threads | Zeit (ms) |
@@ -49,7 +52,7 @@ Genauere Beschreibung in Dokumentation.md
 
 ## 1 Rechner mit i5-13500@4GHz **mit RMI**
 
-| Threads | Zeit (ms) |
+| Worker  | Zeit (ms) |
 |---------|-----------|
 | 1       | 130938    |
 | 2       | 73720     |
@@ -74,7 +77,7 @@ Genauere Beschreibung in Dokumentation.md
 
 ## 2 Rechner mit i5-13500@4GHz und i5-1035G1@3GHz **mit RMI über WLAN**
 
-| Threads (Lokal+Remote) | Zeit (ms) |
+| Worker (Lokal+Remote)  | Zeit (ms) |
 |------------------------|-----------|
 | 20+1                   | 16599     |
 | 20+2                   | 18554     |

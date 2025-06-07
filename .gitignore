@@ -1,4 +1,4 @@
 /target/
 /.vscode/
-*.png
-*.jpg
+/*.png
+/*.bmp
