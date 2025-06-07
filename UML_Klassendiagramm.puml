@@ -3,26 +3,53 @@ skinparam style strictuml
 skinparam classAttributeIconSize 0
 
 ' Interfaces
-
-interface WorkerInterface <<Remote>>
+interface WorkerInterface <<Remote>>{
+    +computeTask
+    }
+interface Bootstrap <<Remote>> {
+    +void registerWorker()
+    +Remote getWorker()
+    +List<Remote> getWorkerList()
+    +List<String> getList()
+    +void clearList()
+    +String getVersion()
+}
 
 ' Klassen
-class Bootstrap
-class GUI
-class Controller
-class MandelbrotCalculator
-class WorkerImpl
-class WorkerServer
+class GUI {
+    +void givePixelData()
+}
+class Controller{    
+    -Bootstrap bootstrap
+    +startComputation()
+    }
+class MandelbrotCalculator{
+    +int computePixel()
+}
+class WorkerImpl{
+    +TaskResult computeTask()
+}
+class WorkerServer{
+    +main()
+}
+class Task 
+
+class TaskResult {
+    +int[][] getPixelData()
+}
 
 ' Beziehungen
 
 GUI --> Controller : uses
-GUI --> Bootstrap : uses
+Controller --> Bootstrap : uses
 Controller ..|> WorkerInterface : uses
 Controller ..|> WorkerImpl : calls per RMI
+Controller --> Task : creates
+Controller --> TaskResult : receives
 WorkerImpl --> WorkerInterface : impelements
 WorkerImpl --> MandelbrotCalculator : uses
 WorkerServer -->Bootstrap : uses
 WorkerServer --> WorkerImpl : starts
-
+WorkerImpl --> TaskResult : returns
 @enduml
+
