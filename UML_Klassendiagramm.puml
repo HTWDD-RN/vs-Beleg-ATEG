@@ -7,6 +7,7 @@ skinparam classAttributeIconSize 0
 interface WorkerInterface <<Remote>>
 
 ' Klassen
+class Bootstrap
 class GUI
 class Controller
 class MandelbrotCalculator
@@ -16,12 +17,12 @@ class WorkerServer
 ' Beziehungen
 
 GUI --> Controller : uses
+GUI --> Bootstrap : uses
 Controller ..|> WorkerInterface : uses
 Controller ..|> WorkerImpl : calls per RMI
 WorkerImpl --> WorkerInterface : impelements
 WorkerImpl --> MandelbrotCalculator : uses
-
-
+WorkerServer -->Bootstrap : uses
 WorkerServer --> WorkerImpl : starts
 
 @enduml
