@@ -30,3 +30,10 @@ Genauere Beschreibung in Dokumentation.md
   - 1 Worker: 130726 ms
   - 4 Worker: 40510 ms
   - 20 Worker: 13675 ms
+
+- 2 Rechner mit i5-13500@4GHz und i5-1035G1@3GHz mit RMI über WLAN:
+  - 20+1 Worker: 16599 ms
+  - 20+4 Worker: 17180 ms
+  - 20+8 Worker: 20889 ms
+
+- 3 Rechner TODO
