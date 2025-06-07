@@ -6,6 +6,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import vs_beleg_ateg.worker.WorkerImpl;
 import vs_beleg_ateg.shared.WorkerInterface;
+import java.rmi.Naming;
 
 public class WorkerServer {
     public static void main(String[] args) {
