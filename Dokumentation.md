@@ -17,7 +17,12 @@ Tobias: Implementierung der PixelBerechnung
 
 # Geschwindigkeit
 
-- 1 Rechner mit i5-13500@4GHz
-  - 1 Worker: 128536 ms
-  - 4 Worker: 38613 ms
-  - 20 Worker: 12159 ms 
+- 1 Rechner mit i5-13500@4GHz ohne RMI
+  - 1 Threads: 128536 ms
+  - 4 Threads: 38613 ms
+  - 20 Threads: 12159 ms
+
+- 1 Rechner mit i5-13500@4GHz mit RMI
+  - 1 Worker: 186438 ms
+  - 4 Worker: 53359 ms
+  - 20 Worker: 15050 ms
