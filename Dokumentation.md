@@ -67,7 +67,7 @@ Implementierung eines verteilten Programms zur parallelen Berechnung und Darstel
 * Kommuniziert mit **Ahmad**, um Aufgaben zu erhalten.
 * Arbeitet mit **Tobias** zusammen, um sicherzustellen, dass die Berechnungslogik korrekt ausgeführt wird.
 
-<<<<<<< HEAD
+# Messwerte
 - 1 Rechner mit i5-13500@4GHz mit RMI
   - 1 Worker: 130726 ms
   - 4 Worker: 40510 ms
@@ -79,30 +79,3 @@ Implementierung eines verteilten Programms zur parallelen Berechnung und Darstel
   - 20+8 Worker: 20889 ms
 
 - 3 Rechner TODO
-=======
----
-
-#### **Eric: Renderer & Bildausgabe**
- 
-
-**Verantwortlichkeiten:**
-
-* **Renderer:** Zeichnet das Bild basierend auf den berechneten Pixelwerten.
-* **Ausgabeformat:** Implementiert eine Methode, um das Bild zu speichern (z. B. als PNG-Datei) oder in einem GUI-Fenster anzuzeigen.
-* **Interaktivität:** Implementiert eine einfache Benutzeroberfläche zur Anzeige des Fortschritts und zur Interaktion (Zoom, Speichern, etc.).
-
-**Zusammenarbeit mit anderen Teammitgliedern:**
-
-* Arbeitet mit **Ahmad** zusammen, um die finalen Ergebnisse nach Abschluss der Berechnung anzuzeigen.
-* Koordiniert mit **Tobias**, um sicherzustellen, dass die vom Berechnungsmodul gelieferten RGB-Werte korrekt dargestellt werden.
-
----
-
-### 🔄 **Zusammenarbeit und Kommunikationsflüsse**
-
-1. **Controller** (Ahmad) teilt das Bild in **Tasks** auf (Zeilen oder Tiles).
-2. **Mandelbrot-Engine** (Tobias) berechnet die Werte für jedes Pixel innerhalb eines Tiles.
-3. **Worker** (Georg) führen die Berechnungen parallel aus, indem sie Tasks vom Controller erhalten und die Mandelbrot-Werte berechnen.
-4. Sobald alle Berechnungen abgeschlossen sind, sendet der **Controller** die Ergebnisse an den **Renderer** (Eric), um das Bild zu visualisieren und zu speichern.
-5. **Renderer** (Eric) zeichnet das Bild und zeigt den Fortschritt an und misst die Berechnungszeit.
->>>>>>> b30cc8b (Updated Dokumentation)
