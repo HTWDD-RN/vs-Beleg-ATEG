@@ -14,6 +14,8 @@ Ahmad: Implementierung des Controllers und Erstellung des BootstrapServers mit G
 Georg: Implementierung der Worker, Planung der Projektarbeit
 Tobias: Implementierung der PixelBerechnung
 
+Genauere Beschreibung in Dokumentation.md
+
 
 # Geschwindigkeit
 
