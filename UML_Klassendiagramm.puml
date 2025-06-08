@@ -17,6 +17,7 @@ interface Bootstrap <<Remote>> {
 
 ' Klassen
 class GUI {
+    +void main()
     +void givePixelData()
 }
 class Controller{    
@@ -41,15 +42,16 @@ class TaskResult {
 ' Beziehungen
 
 GUI --> Controller : uses
-Controller --> Bootstrap : uses
+Controller --> Bootstrap : get WorkerList from
 Controller ..|> WorkerInterface : uses
 Controller ..|> WorkerImpl : calls per RMI
 Controller --> Task : creates
 Controller --> TaskResult : receives
 WorkerImpl --> WorkerInterface : impelements
 WorkerImpl --> MandelbrotCalculator : uses
-WorkerServer -->Bootstrap : uses
+WorkerServer -->Bootstrap : registers Worker
 WorkerServer --> WorkerImpl : starts
 WorkerImpl --> TaskResult : returns
+Task --> WorkerImpl : computes
 @enduml
 
