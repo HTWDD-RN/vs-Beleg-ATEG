@@ -47,7 +47,7 @@ Controller ..|> WorkerInterface : uses
 Controller ..|> WorkerImpl : calls per RMI
 Controller --> Task : creates
 Controller --> TaskResult : receives
-WorkerImpl --> WorkerInterface : impelements
+WorkerImpl --> WorkerInterface : implements
 WorkerImpl --> MandelbrotCalculator : uses
 WorkerServer -->Bootstrap : registers Worker
 WorkerServer --> WorkerImpl : starts
